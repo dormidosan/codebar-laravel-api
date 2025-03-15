@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\DetalleReactivo;
-use App\Models\EquipoReactivo;
-use App\Models\Laboratorio;
-use App\Models\Reactivo;
-use App\Models\ReactivoAsignado;
-use App\Models\Usuario;
+use App\Models\AnalyzerReagent;
+use App\Models\Laboratory;
+use App\Models\LaboratoryReagent;
+use App\Models\ReagentInventory;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,35 +17,31 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-
 //        User::factory()->create([
 //            'name' => 'Test User',
 //            'email' => 'test@example.com',
 //        ]);
-        //User departamentos seeder
-        $this->call(DepartamentoSeeder::class);
-        $this->call(MunicipioSeeder::class);
-        $this->call(DistritoSeeder::class);
+        //User departments seeder
+        $this->call(DepartmentSeeder::class);
+        $this->call(MunicipalitySeeder::class);
+        $this->call(DistrictSeeder::class);
 
-
-        Usuario::factory(20)->create();
-        Laboratorio::factory(50)->create();
+        User::factory(20)->create();
+        Laboratory::factory(50)->create();
 
         //8 Equipos seeder
-        $this->call(EquipoSeeder::class);
+        $this->call(AnalyzerSeeder::class);
 
-        Reactivo::factory(50)->create();
+        $this->call(ReagentTypeSeeder::class);
+        //Reagent::factory(50)->create();
+        $this->call(ReagentSeeder::class);
 
-        EquipoReactivo::factory(50)->create();
+        AnalyzerReagent::factory(50)->create();
 
-        DetalleReactivo::factory(50)->create();
-
-        ReactivoAsignado::factory(50)->create();
-
-
-
-
-
+//
+        ReagentInventory::factory(50)->create();
+//
+        LaboratoryReagent::factory(50)->create();
 
     }
 }

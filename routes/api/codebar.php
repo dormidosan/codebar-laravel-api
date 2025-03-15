@@ -1,24 +1,24 @@
 <?php
 
-use App\Http\Controllers\Api\V1\DepartamentoController;
-use App\Http\Controllers\Api\V1\DetalleReactivoController;
-use App\Http\Controllers\Api\V1\DistritoController;
-use App\Http\Controllers\Api\V1\EquipoController;
-use App\Http\Controllers\Api\V1\EquipoReactivoController;
-use App\Http\Controllers\Api\V1\LaboratorioController;
-use App\Http\Controllers\Api\V1\MunicipioController;
-use App\Http\Controllers\Api\V1\ReactivoAsignadoController;
-use App\Http\Controllers\Api\V1\ReactivoController;
+use App\Http\Controllers\Api\V1\DepartmentController;
+use App\Http\Controllers\Api\V1\ReagentInventoryController;
+use App\Http\Controllers\Api\V1\DistrictController;
+use App\Http\Controllers\Api\V1\AnalyzerController;
+use App\Http\Controllers\Api\V1\AnalyzerReagentController;
+use App\Http\Controllers\Api\V1\LaboratoryController;
+use App\Http\Controllers\Api\V1\MunicipalityController;
+use App\Http\Controllers\Api\V1\LaboratoryReagentController;
+use App\Http\Controllers\Api\V1\ReagentController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('departamentos',DepartamentoController::class);
-Route::apiResource('distritos',DistritoController::class);
-Route::apiResource('municipios',MunicipioController::class);
+Route::apiResource('departments',DepartmentController::class);
+Route::apiResource('districts',DistrictController::class);
+Route::apiResource('municipalities',MunicipalityController::class);
 
-Route::apiResource('laboratorios',LaboratorioController::class);
-Route::apiResource('reactivo-asignado',ReactivoAsignadoController::class);
-Route::apiResource('detalle-reactivo',DetalleReactivoController::class);
+Route::apiResource('laboratories',LaboratoryController::class);
+Route::apiResource('laboratory-reagents',LaboratoryReagentController::class);
+Route::apiResource('reagent-inventories',ReagentInventoryController::class);
 
-Route::apiResource('reactivos',ReactivoController::class);
-Route::apiResource('equipo-reactivo',EquipoReactivoController::class);
-Route::apiResource('equipo',EquipoController::class);
+Route::apiResource('reagents',ReagentController::class);
+Route::apiResource('analyzer-reagent',AnalyzerReagentController::class);
+Route::apiResource('analyzers',AnalyzerController::class);
