@@ -26,3 +26,19 @@ yarn-error.log
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
+
+# Laravel specific
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+
+# Composer
+composer.lock
+
+# NPM
+package-lock.json
+
+# IDE specific
+/.phpstorm.meta.php
+/.phpstorm
