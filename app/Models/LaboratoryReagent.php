@@ -38,6 +38,7 @@ class LaboratoryReagent extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $fillable = ['laboratory_id', 'reagent_inventory_id', 'user_id'];
 
     public function laboratory(): BelongsTo
     {

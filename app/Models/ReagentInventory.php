@@ -44,6 +44,7 @@ class ReagentInventory extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $fillable = ['reagent_id', 'codebar', 'image', 'lot', 'expiration_date'];
 
     public function reagent(): BelongsTo
     {
