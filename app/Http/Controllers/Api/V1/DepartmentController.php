@@ -11,6 +11,9 @@ class DepartmentController extends Controller
     public function index(): JsonResponse
     {
         $departments = Department::all();
+        if ($departments->isEmpty()) {
+            return response()->json(['message' => 'Departments not found', 'data' => [], 'status' => 404]);
+        }
         return response()->json(['message' => 'Success', 'data' => $departments, 'status' => 200]);
     }
 

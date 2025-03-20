@@ -11,7 +11,7 @@ class MunicipalityController extends Controller
     public function index(): JsonResponse
     {
         $municipalities = Municipality::all();
-		return response()->json(['message' => 'Success', 'data' => $municipalities, 'status' => 200]);
+        return response()->json(['message' => 'Success', 'data' => $municipalities, 'status' => 200]);
     }
 
 //    public function store(Request $request): JsonResponse

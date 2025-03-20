@@ -28,6 +28,7 @@ class AnalyzerReagent extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $fillable = ['analyzer_id', 'reagent_id'];
     protected $table = 'analyzer_reagent';
 
 }

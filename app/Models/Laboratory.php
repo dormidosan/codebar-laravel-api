@@ -39,6 +39,7 @@ class Laboratory extends Model
 {
     /** @use HasFactory<LaboratoryFactory> */
     use HasFactory;
+
     protected $fillable = ['district_id', 'address', 'name'];
 
     public function district(): BelongsTo

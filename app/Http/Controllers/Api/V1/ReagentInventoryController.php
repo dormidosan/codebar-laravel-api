@@ -11,37 +11,58 @@ class ReagentInventoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $reagentInventories = ReagentInventory::with('reactivo')->get();
-        return response()->json(['message' => 'Detalle reactivos encontrados', 'data' => $reagentInventories]);
+        $reagentInventories = ReagentInventory::with('reagent')->get();
+        if ($reagentInventories->isEmpty()) {
+            return response()->json(['message' => 'Reagent inventories not found', 'data' => [], 'status' => 404]);
+        }
+        return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories, 'status' => 200]);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $reagentInventory = ReagentInventory::create($request->all());
-        return response()->json(['message' => 'Detalle reactivo created', 'data' => $reagentInventory]);
+        $reagentInventory = new ReagentInventory();
+        $reagentInventory->fill($request->all());
+        if (!$reagentInventory->save()) {
+            return response()->json(['message' => 'Reagent inventory not created', 'data' => [], 'status' => 500]);
+        }
+        return response()->json(['message' => 'Reagent inventory created', 'data' => $reagentInventory, 'status' => 201]);
     }
 
     public function show($id): JsonResponse
     {
-        $reagentInventory = ReagentInventory::with('reactivo')->findOrFail($id);
-        return response()->json(['message' => 'Detalle reactivo encontrado', 'data' => $reagentInventory]);
+        $reagentInventory = ReagentInventory::with('reagent')->find($id);
+        if (empty($reagentInventory)) {
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+        }
+        return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
     }
 
     public function update(Request $request, $id): JsonResponse
     {
-        $reagentInventory = ReagentInventory::findOrFail($id);
-        $reagentInventory->update($request->all());
-//        return $reagentInventory;
-        return response()->json(['message' => 'Detalle reactivo updated', 'data' => $reagentInventory]);
+        $reagentInventory = ReagentInventory::find($id);
+        if (empty($reagentInventory)) {
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+        }
+
+        $reagentInventory->fill($request->all());
+
+        if (!$reagentInventory->save()) {
+            return response()->json(['message' => 'Reagent inventory not updated', 'data' => $reagentInventory, 'status' => 500]);
+        }
+        return response()->json(['message' => 'Reagent inventory updated', 'data' => $reagentInventory, 'status' => 200]);
+
     }
 
     public function destroy($id): JsonResponse
     {
-        $reagentInventory = ReagentInventory::findOrFail($id);
-        $reagentInventory->delete();
-//        return $reagentInventory;
-        return response()->json(['message' => 'Detalle reactivo deleted', 'data' => $reagentInventory]);
+        $reagentInventory = ReagentInventory::find($id);
+        if (empty($reagentInventory)) {
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+        }
+        if (!$reagentInventory->delete()) {
+            return response()->json(['message' => 'Reagent inventory not deleted', 'data' => $reagentInventory, 'status' => 500]);
+        }
+        return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory, 'status' => 200]);
     }
-
 
 }

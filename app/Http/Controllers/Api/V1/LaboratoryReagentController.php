@@ -11,33 +11,58 @@ class LaboratoryReagentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $laboratoryReagents = LaboratoryReagent::with('usuario', 'laboratorio', 'detalleReactivo')->get();
-        return response()->json(['message' => 'success', 'data' => $laboratoryReagents]);
+        $laboratoryReagents = LaboratoryReagent::with('laboratory', 'reagentInventory', 'user')->get();
+        if ($laboratoryReagents->isEmpty()) {
+            return response()->json(['message' => 'Laboratory reagents not found', 'data' => [], 'status' => 404]);
+        }
+        return response()->json(['message' => 'Laboratory reagents found', 'data' => $laboratoryReagents, 'status' => 200]);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $laboratoryReagent = LaboratoryReagent::create($request->all());
-        return response()->json(['message' => 'Detalle reactivo created', 'data' => $laboratoryReagent]);
+        $laboratoryReagent = new LaboratoryReagent();
+        $laboratoryReagent->fill($request->all());
+        if (!$laboratoryReagent->save()) {
+            return response()->json(['message' => 'Laboratory reagent not created', 'data' => [], 'status' => 500]);
+        }
+        return response()->json(['message' => 'Laboratory reagent created', 'data' => $laboratoryReagent, 'status' => 201]);
+
     }
 
     public function show($id): JsonResponse
     {
-        $laboratoryReagent = LaboratoryReagent::findOrFail($id);
-        return response()->json(['message' => 'Detalle reactivo encontrado', 'data' => $laboratoryReagent]);
+        $laboratoryReagent = LaboratoryReagent::find($id);
+        if (empty($laboratoryReagent)) {
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => [], 'status' => 404]);
+        }
+        return response()->json(['message' => 'Laboratory reagent found', 'data' => $laboratoryReagent, 'status' => 200]);
     }
 
     public function update(Request $request, $id): JsonResponse
     {
-        $laboratoryReagent = LaboratoryReagent::findOrFail($id);
-        $laboratoryReagent->update($request->all());
-        return response()->json(['message' => 'Detalle reactivo updated', 'data' => $laboratoryReagent]);
+        $laboratoryReagent = LaboratoryReagent::find($id);
+        if (empty($laboratoryReagent)) {
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => [], 'status' => 404]);
+        }
+
+        $laboratoryReagent->fill($request->all());
+
+        if (!$laboratoryReagent->save()) {
+            return response()->json(['message' => 'Laboratory reagent not updated', 'data' => $laboratoryReagent, 'status' => 500]);
+        }
+        return response()->json(['message' => 'Laboratory reagent updated', 'data' => $laboratoryReagent, 'status' => 200]);
+
     }
 
     public function destroy($id): JsonResponse
     {
-        $detalleReactivo = LaboratoryReagent::findOrFail($id);
-        $detalleReactivo->delete();
-        return response()->json(['message' => 'Detalle reactivo deleted', 'data' => $detalleReactivo]);
+        $laboratoryReagent = LaboratoryReagent::find($id);
+        if (empty($laboratoryReagent)) {
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => [], 'status' => 404]);
+        }
+        if (!$laboratoryReagent->delete()) {
+            return response()->json(['message' => 'Laboratory reagent not deleted', 'data' => $laboratoryReagent, 'status' => 500]);
+        }
+        return response()->json(['message' => 'Laboratory reagent deleted', 'data' => $laboratoryReagent, 'status' => 200]);
     }
 }

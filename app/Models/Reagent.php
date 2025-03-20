@@ -41,6 +41,7 @@ class Reagent extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $fillable = ['reagent_type_id', 'code', 'name', 'volume'];
 
     public function reagentType(): BelongsTo
     {

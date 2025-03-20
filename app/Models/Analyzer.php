@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Analyzer extends Model
 {
     //
+    protected $fillable = ['area', 'name'];
+
     public function reagents(): BelongsToMany
     {
         return $this->belongsToMany(Reagent::class, 'analyzer_reagent')->withTimestamps();
