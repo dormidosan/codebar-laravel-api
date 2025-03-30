@@ -4,9 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DetalleReactivo>
- */
 class ReagentInventoryFactory extends Factory
 {
     /**
@@ -18,7 +15,7 @@ class ReagentInventoryFactory extends Factory
     {
         return [
             'reagent_id' => $this->faker->numberBetween(1, 10),
-            'codebar' => $this->faker->unique()->ean13(),
+            'barcode' => $this->faker->unique()->ean13(),
             'image' => $this->faker->imageUrl(),
             'lot' => $this->faker->numberBetween(1, 10),
             'expiration_date' => $this->faker->dateTimeBetween('now', '+1 years'),

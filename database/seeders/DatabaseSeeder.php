@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         //8 Equipos seeder
         $this->call(AnalyzerSeeder::class);
 
+        $this->call(BarcodeTypeSeeder::class);
         $this->call(ReagentTypeSeeder::class);
         //Reagent::factory(50)->create();
         $this->call(ReagentSeeder::class);

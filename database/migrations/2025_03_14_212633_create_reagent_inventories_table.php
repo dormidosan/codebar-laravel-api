@@ -13,10 +13,11 @@ return new class extends Migration {
         Schema::create('reagent_inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reagent_id')->constrained('reagents')->cascadeOnDelete();
-            $table->string('codebar', 255);
+            $table->foreignId('barcode_type_id')->default(1)->constrained('barcode_types')->cascadeOnDelete();
+            $table->string('barcode', 255);
             $table->string('image', 255)->nullable();
             $table->string('lot', 255);
-            $table->dateTime('expiration_date');
+            $table->date('expiration_date');
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

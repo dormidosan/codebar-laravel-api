@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e, $request) {
             return response()->json([
                 'success' => false,
-                'message' => "Resource not found.".$e->getMessage(),
+                'message' => "Resource not found. ". $e->getMessage(),
                 'status' => 404
             ], 404);
         });

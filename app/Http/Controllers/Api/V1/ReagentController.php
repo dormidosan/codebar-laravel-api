@@ -11,7 +11,7 @@ class ReagentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $reagents = Reagent::all();
+        $reagents = Reagent::with('reagentType')->get();
         if ($reagents->isEmpty()) {
             return response()->json(['message' => 'Reagents not found', 'data' => [], 'status' => 404]);
         }

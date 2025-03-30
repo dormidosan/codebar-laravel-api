@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\BarcodeType;
 use App\Models\ReagentInventory;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class ReagentInventoryController extends Controller
 {
@@ -21,7 +24,18 @@ class ReagentInventoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $reagentInventory = new ReagentInventory();
+        $barcodeTypeId = 1;
+        if ($request->has('barcode_type_id')) {
+            $barcodeTypeId = $request->get('barcode_type_id');
+        } else if ($request->has('barcode_type_name')) {
+            try {
+                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('reagent_type_name')])->id;
+            } catch (Exception $e) {
+                //TODO: Log error
+            }
+        }
         $reagentInventory->fill($request->all());
+        $reagentInventory->barcode_type_id = $barcodeTypeId;
         if (!$reagentInventory->save()) {
             return response()->json(['message' => 'Reagent inventory not created', 'data' => [], 'status' => 500]);
         }
@@ -34,6 +48,10 @@ class ReagentInventoryController extends Controller
         if (empty($reagentInventory)) {
             return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
         }
+        $generator = new BarcodeGeneratorPNG();
+        $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128,1,60, [0, 1, 0]);
+        $barcodeBase64 = base64_encode($barcode);
+        $reagentInventory->barcode = 'data:image/png;base64,' . $barcodeBase64;
         return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
     }
 

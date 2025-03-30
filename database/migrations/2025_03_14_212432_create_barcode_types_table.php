@@ -10,11 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('distritos', function (Blueprint $table) {
+        Schema::create('barcode_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('departamento_id')->constrained('departamentos')->cascadeOnDelete();
-            $table->foreignId('municipio_id')->constrained('municipios')->cascadeOnDelete();
-            $table->string('nombre', 25);
+            $table->string('name', 25);
         });
     }
 
@@ -23,6 +21,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('distritos');
+        Schema::dropIfExists('reagent_types');
     }
 };

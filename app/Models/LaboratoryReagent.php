@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Database\Factories\LaboratoryReagentFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $laboratory_id
@@ -17,19 +18,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property-read Laboratory $laboratory
- * @property-read ReagentInventory $reagentInventory
- * @property-read User $user
+ * @property-read \App\Models\Laboratory $laboratory
+ * @property-read \App\Models\ReagentInventory $reagentInventory
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\LaboratoryReagentFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereLaboratoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereReagentInventoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LaboratoryReagent whereUserId($value)
+ * @method static Builder<static>|LaboratoryReagent newModelQuery()
+ * @method static Builder<static>|LaboratoryReagent newQuery()
+ * @method static Builder<static>|LaboratoryReagent query()
+ * @method static Builder<static>|LaboratoryReagent whereCreatedAt($value)
+ * @method static Builder<static>|LaboratoryReagent whereId($value)
+ * @method static Builder<static>|LaboratoryReagent whereLaboratoryId($value)
+ * @method static Builder<static>|LaboratoryReagent whereReagentInventoryId($value)
+ * @method static Builder<static>|LaboratoryReagent whereUpdatedAt($value)
+ * @method static Builder<static>|LaboratoryReagent whereUserId($value)
  * @mixin Eloquent
  */
 class LaboratoryReagent extends Model
