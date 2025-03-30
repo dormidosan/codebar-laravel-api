@@ -16,7 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -70,6 +70,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function laboratoryReagents(): HasMany
+    {
+        return $this->hasMany(LaboratoryReagent::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -81,10 +86,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function laboratoryReagents(): HasMany
-    {
-        return $this->hasMany(LaboratoryReagent::class);
     }
 }

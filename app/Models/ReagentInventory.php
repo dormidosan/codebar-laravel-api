@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $reagent_id
@@ -46,10 +46,8 @@ class ReagentInventory extends Model
 {
     /** @use HasFactory<ReagentInventoryFactory> */
     use HasFactory;
-
-    public $timestamps = false;
-
-    protected $fillable = [ 'reagent_id', 'barcode_type_id', 'barcode', 'image', 'lot', 'expiration_date', 'created_at', 'updated_at'];
+    
+    protected $fillable = ['reagent_id', 'barcode_type_id', 'barcode', 'image', 'lot', 'expiration_date', 'created_at', 'updated_at'];
 
     public function reagent(): BelongsTo
     {

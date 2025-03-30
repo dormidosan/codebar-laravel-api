@@ -28,11 +28,14 @@ class ReagentInventoryController extends Controller
         $barcodeTypeId = BarcodeTypes::CODE128;
         if ($request->has('barcode_type_id')) {
             $barcodeTypeId = $request->get('barcode_type_id');
-        } else if ($request->has('barcode_type_name')) {
-            try {
-                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
-            } catch (Exception $e) {
-                //TODO: Log error
+        }
+        else {
+            if ($request->has('barcode_type_name')) {
+                try {
+                    $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
+                } catch (Exception $e) {
+                    //TODO: Log error
+                }
             }
         }
         $reagentInventory->fill($request->all());
@@ -50,9 +53,9 @@ class ReagentInventoryController extends Controller
             return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
         }
         $generator = new BarcodeGeneratorPNG();
-        $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128,1,60, [0, 1, 0]);
+        $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128, 1, 60, [0, 1, 0]);
         $barcodeBase64 = base64_encode($barcode);
-        $reagentInventory->barcode = 'data:image/png;base64,' . $barcodeBase64;
+        $reagentInventory->barcode = 'data:image/png;base64,'.$barcodeBase64;
         return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
     }
 
