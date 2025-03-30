@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\BarcodeTypes;
 use App\Http\Controllers\Controller;
 use App\Models\BarcodeType;
 use App\Models\ReagentInventory;
@@ -24,12 +25,12 @@ class ReagentInventoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $reagentInventory = new ReagentInventory();
-        $barcodeTypeId = 1;
+        $barcodeTypeId = BarcodeTypes::CODE128;
         if ($request->has('barcode_type_id')) {
             $barcodeTypeId = $request->get('barcode_type_id');
         } else if ($request->has('barcode_type_name')) {
             try {
-                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('reagent_type_name')])->id;
+                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
             } catch (Exception $e) {
                 //TODO: Log error
             }
