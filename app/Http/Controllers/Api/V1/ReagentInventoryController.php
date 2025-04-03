@@ -9,7 +9,10 @@ use App\Models\ReagentInventory;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Picqer\Barcode\BarcodeGeneratorPNG;
+use Picqer\Barcode\Exceptions\UnknownTypeException;
 
 class ReagentInventoryController extends Controller
 {
@@ -52,10 +55,20 @@ class ReagentInventoryController extends Controller
         if (empty($reagentInventory)) {
             return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
         }
-        $generator = new BarcodeGeneratorPNG();
-        $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128, 1, 60, [0, 1, 0]);
-        $barcodeBase64 = base64_encode($barcode);
-        $reagentInventory->barcode = 'data:image/png;base64,'.$barcodeBase64;
+        if (empty($reagentInventory->image)) {
+            try {
+                $generator = new BarcodeGeneratorPNG();
+                $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128, 1, 60, [0, 1, 0]);
+                $fileName = 'barcodes/'.$reagentInventory->barcode.'.png';
+                Storage::disk('public')->put($fileName, $barcode);
+                $reagentInventory->image = Storage::url($fileName);
+                $reagentInventory->save();
+            } catch (UnknownTypeException $e) {
+                Log::error('Barcode generation failed: '.$e->getMessage());
+                return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => false]);
+            }
+            return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => true]);
+        }
         return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
     }
 
@@ -87,4 +100,27 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory, 'status' => 200]);
     }
 
+    // check if barcode is unique
+    public function checkBarcode(Request $request): JsonResponse
+    {
+        $barcode = $request->get('barcode');
+        $barcodeTypeId = BarcodeTypes::CODE128;
+        if ($request->has('barcode_type_id')) {
+            $barcodeTypeId = $request->get('barcode_type_id');
+        }
+        if ($request->has('barcode_type_name')) {
+            $barcodeTypeId = BarcodeType::where('name', $request->get('barcode_type_name'))
+                ->first()
+                ->id;
+        }
+        $reagentInventory = ReagentInventory::where('barcode', $barcode)
+            ->where('barcode_type_id', $barcodeTypeId)
+            ->first();
+        if (empty($reagentInventory)) {
+            return response()->json(['message' => 'Barcode is unique', 'data' => [], 'status' => 200]);
+        }
+        return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory, 'status' => 200]);
+    }
+
 }
+
