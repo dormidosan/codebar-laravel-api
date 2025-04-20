@@ -9,9 +9,18 @@ use Illuminate\Http\Request;
 
 class LaboratoryController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $laboratories = Laboratory::all();
+        $query = Laboratory::query();
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->get('name') . '%');
+        }
+        if ($request->has('address')) {
+            $query->where('address', 'like', '%' . $request->get('address') . '%');
+        }
+
+        $laboratories = $query->get();
+
         if ($laboratories->isEmpty()) {
             return response()->json(['message' => 'Laboratories not found', 'data' => [], 'status' => 404]);
         }
