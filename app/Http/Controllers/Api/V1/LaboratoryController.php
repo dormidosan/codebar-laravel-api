@@ -12,19 +12,21 @@ class LaboratoryController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Laboratory::query();
-        if ($request->has('name')) {
-            $query->where('name', 'like', '%' . $request->get('name') . '%');
-        }
-        if ($request->has('address')) {
-            $query->where('address', 'like', '%' . $request->get('address') . '%');
-        }
+        $query->where(function ($q) use ($request) {
+            if ($request->filled('name')) {
+                $q->orWhere('name', 'like', '%' . $request->get('name') . '%');
+            }
+            if ($request->filled('address')) {
+                $q->orWhere('address', 'like', '%' . $request->get('address') . '%');
+            }
+        });
 
         $laboratories = $query->get();
 
         if ($laboratories->isEmpty()) {
             return response()->json(['message' => 'Laboratories not found', 'data' => [], 'status' => 404]);
         }
-        return response()->json(['message' => 'Laboratories found', 'data' => $laboratories, 'status' => 200]);
+        return response()->json(['message' => 'Laboratories found', 'data' => $laboratories,'count' => count($laboratories) ,'status' => 200]);
     }
 
     public function store(Request $request): JsonResponse
