@@ -1,5 +1,9 @@
 name: Laravel CI/CD
-on: push
+on:
+  push:
+    branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -7,10 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Composer
-        uses: php-actions/composer@v2
-        with:
-          args: install --no-dev
+#      - name: Install Composer
+#        uses: php-actions/composer@v2
+#        with:
+#          args: install --no-dev
+
+      - name: Install Dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run Tests
         run: php artisan test
