@@ -41,7 +41,7 @@ class LaboratoryController extends Controller
 
     public function show($id): JsonResponse
     {
-        $laboratory = Laboratory::find($id);
+        $laboratory = Laboratory::with('district')->find($id);
         if (empty($laboratory)) {
             return response()->json(['message' => 'Laboratory not found', 'data' => [], 'status' => 404]);
         }
