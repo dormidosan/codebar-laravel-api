@@ -21,7 +21,7 @@ class LaboratoryController extends Controller
             }
         });
 
-        $laboratories = $query->get();
+        $laboratories = $query->with('district')->get();
 
         if ($laboratories->isEmpty()) {
             return response()->json(['message' => 'Laboratories not found', 'data' => [], 'status' => 404]);
