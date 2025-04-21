@@ -9,9 +9,20 @@ use Illuminate\Http\Request;
 
 class LaboratoryReagentController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $laboratoryReagents = LaboratoryReagent::with('laboratory', 'reagentInventory', 'user')->get();
+        $query = LaboratoryReagent::query();
+        if($request->filled("laboratory_id")){
+            $query->where('laboratory_id', $request->get('laboratory_id'));
+        }
+        if($request->filled("reagent_inventory_id")){
+            $query->where('reagent_inventory_id', $request->get('reagent_inventory_id'));
+        }
+        if($request->filled("user_id")){
+            $query->where('user_id', $request->get('user_id'));
+        }
+
+        $laboratoryReagents = $query->with('reagentInventory', 'user', 'reagentInventory.reagent')->get();
         if ($laboratoryReagents->isEmpty()) {
             return response()->json(['message' => 'Laboratory reagents not found', 'data' => [], 'status' => 404]);
         }
