@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e, $request) {
             return response()->json([
                 'success' => false,
-                'message' => "Resource not found. ". $e->getMessage(),
+                'message' => "Resource not found. ".$e->getMessage(),
                 'status' => 404
             ], 404);
         });
@@ -41,6 +42,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => "Method not allowed.".$e->getMessage(),
                 'status' => 405
             ], 405);
+        });
+
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => "Error authentication. ".$e->getMessage(),
+                'status' => 401
+            ], 401);
         });
 
         $exceptions->render(function (Throwable $e, $request) {

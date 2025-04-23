@@ -1,14 +1,18 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::post('login', [AuthController::class, 'login']);
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 //File for API is barcode.php
+// TODO: change to use auth:sanctum
 Route::prefix('v1')->group(base_path('routes/api/barcode.php'));
+//Route::middleware('auth:sanctum')->prefix('v1')->group(base_path('routes/api/barcode.php'));
 
 
 Route::post('/examenesEquipo', function () {
