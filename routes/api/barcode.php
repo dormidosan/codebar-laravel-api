@@ -23,6 +23,10 @@ Route::apiResource('laboratory-reagents', LaboratoryReagentController::class);
 
 Route::apiResource('reagent-inventories', ReagentInventoryController::class);
 
+// TODO: Delete this route when the frontend is ready
+//Route::get('reagents/index-inventory', [ReagentController::class, 'indexInventory'])
+//    ->name('reagents.index-inventory');
 Route::apiResource('reagents', ReagentController::class);
+
 Route::apiResource('analyzer-reagent', AnalyzerReagentController::class);
 Route::apiResource('analyzers', AnalyzerController::class);

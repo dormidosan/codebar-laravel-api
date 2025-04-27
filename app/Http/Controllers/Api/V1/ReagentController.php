@@ -9,9 +9,16 @@ use Illuminate\Http\Request;
 
 class ReagentController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $reagents = Reagent::with('reagentType')->get();
+        if ($request->get("counting")){
+            $reagents = Reagent::with('reagentType')
+                ->withCount('reagentInventory')
+                ->get();
+        } else {
+            $reagents = Reagent::with('reagentType')->get();
+        }
+
         if ($reagents->isEmpty()) {
             return response()->json(['message' => 'Reagents not found', 'data' => [], 'status' => 404]);
         }
