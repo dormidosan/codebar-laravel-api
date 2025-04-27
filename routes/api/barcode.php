@@ -16,7 +16,11 @@ Route::apiResource('districts', DistrictController::class);
 Route::apiResource('municipalities', MunicipalityController::class);
 
 Route::apiResource('laboratories', LaboratoryController::class);
+
+Route::post('laboratory-reagents/assign', [LaboratoryReagentController::class, 'assign'])
+    ->name('laboratory-reagents.assign');
 Route::apiResource('laboratory-reagents', LaboratoryReagentController::class);
+
 Route::apiResource('reagent-inventories', ReagentInventoryController::class);
 
 Route::apiResource('reagents', ReagentController::class);

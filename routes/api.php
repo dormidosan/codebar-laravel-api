@@ -11,14 +11,12 @@ Route::get('/user', function (Request $request) {
 
 //File for API is barcode.php
 // TODO: change to use auth:sanctum
-Route::prefix('v1')->group(base_path('routes/api/barcode.php'));
-//Route::middleware('auth:sanctum')->prefix('v1')->group(base_path('routes/api/barcode.php'));
-
+//Route::prefix('v1')->group(base_path('routes/api/barcode.php'));
+Route::middleware('auth:sanctum')->prefix('v1')->group(base_path('routes/api/barcode.php'));
 
 Route::post('/examenesEquipo', function () {
 
-
-    $return =     [
+    $return = [
         [
             "idRegExamenEnc" => 1438616,
             "idAfiliado" => 6860,
@@ -251,21 +249,20 @@ Route::post('/actualizarEstado', function (Request $request) {
 
     $return =
         [
-            "idRegExamenDet" => (int)$idRegExamenDet,
+            "idRegExamenDet" => (int) $idRegExamenDet,
             "codigoExamen" => null,
-            "estadoEquipo" => (int)$estadoEquipo,
+            "estadoEquipo" => (int) $estadoEquipo,
             "resultados" => null
         ];
     return response()->json($return);
 });
 
-
 Route::post('/actualizarResultados', function (Request $request) {
-	$idRegExamenDet = $request->input('idRegExamenDet');
+    $idRegExamenDet = $request->input('idRegExamenDet');
     $resultados = $request->input('resultados');
-	$return =
+    $return =
         [
-            "idRegExamenDet" => (int)$idRegExamenDet,
+            "idRegExamenDet" => (int) $idRegExamenDet,
             "codigoExamen" => null,
             "estadoEquipo" => null,
             "resultados" => $resultados

@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
+
+            $table->unique(['laboratory_id', 'reagent_inventory_id'], 'unique_laboratory_reagent');
         });
     }
 
