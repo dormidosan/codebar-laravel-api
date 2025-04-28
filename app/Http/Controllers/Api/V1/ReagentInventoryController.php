@@ -6,13 +6,10 @@ use App\Enums\BarcodeTypes;
 use App\Http\Controllers\Controller;
 use App\Models\BarcodeType;
 use App\Models\ReagentInventory;
+use App\Services\BarcodeService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Picqer\Barcode\BarcodeGeneratorPNG;
-use Picqer\Barcode\Exceptions\UnknownTypeException;
 
 class ReagentInventoryController extends Controller
 {
@@ -25,49 +22,53 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories, 'status' => 200]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, BarcodeService $barcodeService): JsonResponse
     {
         $reagentInventory = new ReagentInventory();
         $barcodeTypeId = BarcodeTypes::CODE128;
+
+        // Get barcode type id from request or create a new one
         if ($request->has('barcode_type_id')) {
             $barcodeTypeId = $request->get('barcode_type_id');
         }
-        else {
-            if ($request->has('barcode_type_name')) {
-                try {
-                    $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
-                } catch (Exception $e) {
-                    //TODO: Log error
-                }
+
+        if ($request->has('barcode_type_name')) {
+            try {
+                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
+                $barcodeName = BarcodeTypes::expoToLaravel($request->get('barcode_type_name'));
+            } catch (Exception $e) {
+                //TODO: Log error
             }
         }
+
         $reagentInventory->fill($request->all());
         $reagentInventory->barcode_type_id = $barcodeTypeId;
+        $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, $barcodeName ?? 'C128');
+
+        if ($imageURL) {
+            $reagentInventory->image = $imageURL;
+        }
+
         if (!$reagentInventory->save()) {
             return response()->json(['message' => 'Reagent inventory not created', 'data' => [], 'status' => 500]);
         }
         return response()->json(['message' => 'Reagent inventory created', 'data' => $reagentInventory, 'status' => 201]);
     }
 
-    public function show($id): JsonResponse
+    public function show($id, BarcodeService $barcodeService): JsonResponse
     {
         $reagentInventory = ReagentInventory::with('reagent')->find($id);
         if (empty($reagentInventory)) {
             return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
         }
         if (empty($reagentInventory->image)) {
-            try {
-                $generator = new BarcodeGeneratorPNG();
-                $barcode = $generator->getBarcode($reagentInventory->barcode, $generator::TYPE_CODE_128, 1, 60, [0, 1, 0]);
-                $fileName = 'barcodes/'.$reagentInventory->barcode.'.png';
-                Storage::disk('public')->put($fileName, $barcode);
-                $reagentInventory->image = Storage::url($fileName);
+            $imageUrl = $barcodeService->generateBarcode($reagentInventory->barcode);
+            if ($imageUrl) {
+                $reagentInventory->image = $imageUrl;
                 $reagentInventory->save();
-            } catch (UnknownTypeException $e) {
-                Log::error('Barcode generation failed: '.$e->getMessage());
-                return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => false]);
+                return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => true]);
             }
-            return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => true]);
+            return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => false]);
         }
         return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
     }

@@ -20,12 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $code
  * @property string $name
  * @property string $volume
- * @property-read Collection<int, \App\Models\Analyzer> $analyzers
+ * @property-read Collection<int, Analyzer> $analyzers
  * @property-read int|null $analyzers_count
- * @property-read Collection<int, \App\Models\ReagentInventory> $reagentInventory
+ * @property-read Collection<int, ReagentInventory> $reagentInventory
  * @property-read int|null $reagent_inventory_count
- * @property-read \App\Models\ReagentType $reagentType
- * @method static \Database\Factories\ReagentFactory factory($count = null, $state = [])
+ * @property-read ReagentType $reagentType
+ * @method static ReagentFactory factory($count = null, $state = [])
  * @method static Builder<static>|Reagent newModelQuery()
  * @method static Builder<static>|Reagent newQuery()
  * @method static Builder<static>|Reagent query()
