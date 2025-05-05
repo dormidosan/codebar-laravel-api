@@ -81,8 +81,6 @@ class BarcodeTypes
      * @param  string  $expoType
      * @return string|null
      */
-
-
     public static function expoToLaravel(string $expoType): ?string
     {
         $expoToLaravel = [

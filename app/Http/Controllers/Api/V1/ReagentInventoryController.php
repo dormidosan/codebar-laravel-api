@@ -24,10 +24,11 @@ class ReagentInventoryController extends Controller
 
     public function store(Request $request, BarcodeService $barcodeService): JsonResponse
     {
+
         $reagentInventory = new ReagentInventory();
         $barcodeTypeId = BarcodeTypes::CODE128;
 
-        // Get barcode type id from request or create a new one
+        // TODO: Get barcode type id from request or create a new one
         if ($request->has('barcode_type_id')) {
             $barcodeTypeId = $request->get('barcode_type_id');
         }
@@ -39,6 +40,18 @@ class ReagentInventoryController extends Controller
             } catch (Exception $e) {
                 //TODO: Log error
             }
+        }
+
+        $existingInventory = ReagentInventory::where('barcode', $request->get('barcode'))
+            ->where('barcode_type_id', $barcodeTypeId)
+            ->first();
+
+        if ($existingInventory) {
+            return response()->json([
+                'message' => 'Reagent inventory with the same barcode already exists',
+                'data' => $existingInventory,
+                'status' => 409
+            ]);
         }
 
         $reagentInventory->fill($request->all());

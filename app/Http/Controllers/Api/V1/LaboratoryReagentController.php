@@ -23,7 +23,9 @@ class LaboratoryReagentController extends Controller
             $query->where('user_id', $request->get('user_id'));
         }
 
-        $laboratoryReagents = $query->with('reagentInventory', 'user', 'reagentInventory.reagent')->get();
+        $laboratoryReagents = $query->with('reagentInventory', 'user', 'reagentInventory.reagent')
+            ->orderBy('id', 'desc')
+            ->get();
         if ($laboratoryReagents->isEmpty()) {
             return response()->json(['message' => 'Laboratory reagents not found', 'data' => [], 'status' => 404]);
         }
