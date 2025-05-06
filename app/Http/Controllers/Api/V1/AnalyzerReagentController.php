@@ -13,9 +13,9 @@ class AnalyzerReagentController extends Controller
     {
         $analyzerReagents = AnalyzerReagent::all();
         if ($analyzerReagents->isEmpty()) {
-            return response()->json(['message' => 'Analyzer Reagents not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Analyzer Reagents not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Analyzer Reagents found', 'data' => $analyzerReagents, 'status' => 200]);
+        return response()->json(['message' => 'Analyzer Reagents found', 'data' => $analyzerReagents]);
 
     }
 
@@ -24,9 +24,9 @@ class AnalyzerReagentController extends Controller
         $analyzerReagent = new AnalyzerReagent();
         $analyzerReagent->fill($request->all());
         if (!$analyzerReagent->save()) {
-            return response()->json(['message' => 'Analyzer Reagent not created', 'data' => [], 'status' => 500]);
+            return response()->json(['message' => 'Analyzer Reagent not created', 'data' => []], 500);
         }
-        return response()->json(['message' => 'Analyzer Reagent created', 'data' => $analyzerReagent, 'status' => 201]);
+        return response()->json(['message' => 'Analyzer Reagent created', 'data' => $analyzerReagent], 201);
 
     }
 
@@ -34,9 +34,9 @@ class AnalyzerReagentController extends Controller
     {
         $analyzerReagent = AnalyzerReagent::find($id);
         if (empty($analyzerReagent)) {
-            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Analyzer Reagent found', 'data' => $analyzerReagent, 'status' => 200]);
+        return response()->json(['message' => 'Analyzer Reagent found', 'data' => $analyzerReagent]);
 
     }
 
@@ -44,15 +44,15 @@ class AnalyzerReagentController extends Controller
     {
         $analyzerReagent = AnalyzerReagent::find($id);
         if (empty($analyzerReagent)) {
-            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => []], 400);
         }
 
         $analyzerReagent->fill($request->all());
 
         if (!$analyzerReagent->save()) {
-            return response()->json(['message' => 'Analyzer Reagent not updated', 'data' => $analyzerReagent, 'status' => 500]);
+            return response()->json(['message' => 'Analyzer Reagent not updated', 'data' => $analyzerReagent], 500);
         }
-        return response()->json(['message' => 'Analyzer Reagent updated', 'data' => $analyzerReagent, 'status' => 200]);
+        return response()->json(['message' => 'Analyzer Reagent updated', 'data' => $analyzerReagent]);
 
     }
 
@@ -60,12 +60,12 @@ class AnalyzerReagentController extends Controller
     {
         $analyzerReagent = AnalyzerReagent::find($id);
         if (empty($analyzerReagent)) {
-            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Analyzer Reagent not found', 'data' => []], 400);
         }
         if (!$analyzerReagent->delete()) {
-            return response()->json(['message' => 'Analyzer Reagent not deleted', 'data' => $analyzerReagent, 'status' => 500]);
+            return response()->json(['message' => 'Analyzer Reagent not deleted', 'data' => $analyzerReagent], 500);
         }
-        return response()->json(['message' => 'Analyzer Reagent deleted', 'data' => $analyzerReagent, 'status' => 200]);
+        return response()->json(['message' => 'Analyzer Reagent deleted', 'data' => $analyzerReagent]);
 
     }
 }

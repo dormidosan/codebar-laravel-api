@@ -17,9 +17,9 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventories = ReagentInventory::with('reagent')->get();
         if ($reagentInventories->isEmpty()) {
-            return response()->json(['message' => 'Reagent inventories not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Reagent inventories not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories, 'status' => 200]);
+        return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories]);
     }
 
     public function store(Request $request, BarcodeService $barcodeService): JsonResponse
@@ -63,42 +63,42 @@ class ReagentInventoryController extends Controller
         }
 
         if (!$reagentInventory->save()) {
-            return response()->json(['message' => 'Reagent inventory not created', 'data' => [], 'status' => 500]);
+            return response()->json(['message' => 'Reagent inventory not created', 'data' => []], 500);
         }
-        return response()->json(['message' => 'Reagent inventory created', 'data' => $reagentInventory, 'status' => 201]);
+        return response()->json(['message' => 'Reagent inventory created', 'data' => $reagentInventory], 201);
     }
 
     public function show($id, BarcodeService $barcodeService): JsonResponse
     {
         $reagentInventory = ReagentInventory::with('reagent')->find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
         }
         if (empty($reagentInventory->image)) {
             $imageUrl = $barcodeService->generateBarcode($reagentInventory->barcode);
             if ($imageUrl) {
                 $reagentInventory->image = $imageUrl;
                 $reagentInventory->save();
-                return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => true]);
+                return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'generated' => true]);
             }
-            return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200, 'generated' => false]);
+            return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'generated' => false]);
         }
-        return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory, 'status' => 200]);
+        return response()->json(['message' => 'Reagent inventory found', 'data' => $reagentInventory]);
     }
 
     public function update(Request $request, $id): JsonResponse
     {
         $reagentInventory = ReagentInventory::find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
         }
 
         $reagentInventory->fill($request->all());
 
         if (!$reagentInventory->save()) {
-            return response()->json(['message' => 'Reagent inventory not updated', 'data' => $reagentInventory, 'status' => 500]);
+            return response()->json(['message' => 'Reagent inventory not updated', 'data' => $reagentInventory], 500);
         }
-        return response()->json(['message' => 'Reagent inventory updated', 'data' => $reagentInventory, 'status' => 200]);
+        return response()->json(['message' => 'Reagent inventory updated', 'data' => $reagentInventory]);
 
     }
 
@@ -106,12 +106,12 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventory = ReagentInventory::find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
         }
         if (!$reagentInventory->delete()) {
-            return response()->json(['message' => 'Reagent inventory not deleted', 'data' => $reagentInventory, 'status' => 500]);
+            return response()->json(['message' => 'Reagent inventory not deleted', 'data' => $reagentInventory], 500);
         }
-        return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory, 'status' => 200]);
+        return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory]);
     }
 
     // check if barcode is unique
@@ -131,9 +131,9 @@ class ReagentInventoryController extends Controller
             ->where('barcode_type_id', $barcodeTypeId)
             ->first();
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Barcode is unique', 'data' => [], 'status' => 200]);
+            return response()->json(['message' => 'Barcode is unique', 'data' => []]);
         }
-        return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory, 'status' => 200]);
+        return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory]);
     }
 
 }

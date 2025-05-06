@@ -14,19 +14,19 @@ class LaboratoryController extends Controller
         $query = Laboratory::query();
         $query->where(function ($q) use ($request) {
             if ($request->filled('name')) {
-                $q->orWhere('name', 'like', '%' . $request->get('name') . '%');
+                $q->orWhere('name', 'like', '%'.$request->get('name').'%');
             }
             if ($request->filled('address')) {
-                $q->orWhere('address', 'like', '%' . $request->get('address') . '%');
+                $q->orWhere('address', 'like', '%'.$request->get('address').'%');
             }
         });
 
         $laboratories = $query->with('district')->get();
 
         if ($laboratories->isEmpty()) {
-            return response()->json(['message' => 'Laboratories not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Laboratories not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Laboratories found', 'data' => $laboratories,'count' => count($laboratories) ,'status' => 200]);
+        return response()->json(['message' => 'Laboratories found', 'data' => $laboratories, 'count' => count($laboratories)]);
     }
 
     public function store(Request $request): JsonResponse
@@ -34,33 +34,33 @@ class LaboratoryController extends Controller
         $laboratory = new Laboratory();
         $laboratory->fill($request->all());
         if (!$laboratory->save()) {
-            return response()->json(['message' => 'Laboratory not created', 'data' => [], 'status' => 500]);
+            return response()->json(['message' => 'Laboratory not created', 'data' => []], 500);
         }
-        return response()->json(['message' => 'Laboratory created', 'data' => $laboratory, 'status' => 201]);
+        return response()->json(['message' => 'Laboratory created', 'data' => $laboratory], 201);
     }
 
     public function show($id): JsonResponse
     {
         $laboratory = Laboratory::with('district')->find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Laboratory found', 'data' => $laboratory, 'status' => 200]);
+        return response()->json(['message' => 'Laboratory found', 'data' => $laboratory]);
     }
 
     public function update(Request $request, $id): JsonResponse
     {
         $laboratory = Laboratory::find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
         }
 
         $laboratory->fill($request->all());
 
         if (!$laboratory->save()) {
-            return response()->json(['message' => 'Laboratory not updated', 'data' => $laboratory, 'status' => 500]);
+            return response()->json(['message' => 'Laboratory not updated', 'data' => $laboratory], 500);
         }
-        return response()->json(['message' => 'Laboratory updated', 'data' => $laboratory, 'status' => 200]);
+        return response()->json(['message' => 'Laboratory updated', 'data' => $laboratory]);
 
     }
 
@@ -68,11 +68,11 @@ class LaboratoryController extends Controller
     {
         $laboratory = Laboratory::find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
         }
         if (!$laboratory->delete()) {
-            return response()->json(['message' => 'Laboratory not deleted', 'data' => $laboratory, 'status' => 500]);
+            return response()->json(['message' => 'Laboratory not deleted', 'data' => $laboratory], 500);
         }
-        return response()->json(['message' => 'Laboratory deleted', 'data' => $laboratory, 'status' => 200]);
+        return response()->json(['message' => 'Laboratory deleted', 'data' => $laboratory]);
     }
 }

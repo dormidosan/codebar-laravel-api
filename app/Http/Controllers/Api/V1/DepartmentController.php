@@ -12,9 +12,9 @@ class DepartmentController extends Controller
     {
         $departments = Department::all();
         if ($departments->isEmpty()) {
-            return response()->json(['message' => 'Departments not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Departments not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Success', 'data' => $departments, 'status' => 200]);
+        return response()->json(['message' => 'Success', 'data' => $departments]);
     }
 
 //    public function store(Request $request): JsonResponse

@@ -12,9 +12,9 @@ class DistrictController extends Controller
     {
         $districts = District::all();
         if ($districts->isEmpty()) {
-            return response()->json(['message' => 'Districts not found', 'data' => [], 'status' => 404]);
+            return response()->json(['message' => 'Districts not found', 'data' => []], 400);
         }
-        return response()->json(['message' => 'Success', 'data' => $districts, 'status' => 200]);
+        return response()->json(['message' => 'Success', 'data' => $districts]);
     }
 
 //    public function store(Request $request): JsonResponse
