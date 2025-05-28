@@ -51,9 +51,8 @@ class ReagentInventoryController extends Controller
         if ($existingInventory) {
             return response()->json([
                 'message' => 'Reagent inventory with the same barcode already exists',
-                'data' => $existingInventory,
-                'status' => 409
-            ]);
+                'data' => $existingInventory
+            ], 409);
         }
 
         $reagentInventory->fill($request->all());
