@@ -33,6 +33,7 @@ class ReagentInventoryController extends Controller
             $barcodeTypeId = $request->get('barcode_type_id');
         }
 
+        // Get id of a barcode type by name or create a new one
         if ($request->has('barcode_type_name')) {
             try {
                 $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
@@ -44,6 +45,7 @@ class ReagentInventoryController extends Controller
 
         $existingInventory = ReagentInventory::where('barcode', $request->get('barcode'))
             ->where('barcode_type_id', $barcodeTypeId)
+            ->where('reagent_id', $request->get('reagent_id'))
             ->first();
 
         if ($existingInventory) {
