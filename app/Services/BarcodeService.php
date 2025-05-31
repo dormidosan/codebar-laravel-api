@@ -60,7 +60,7 @@ class BarcodeService
             Storage::disk('public')->put($fileName, $finalImageWithText);
 
             $fileName = 'barcodes/'.$barcode.'.png';
-            Storage::disk('public')->put($fileName, $barcodeImage);
+            Storage::disk('public')->putd($fileName, $barcodeImage);
             return Storage::url($fileName);
         } catch (UnknownTypeException $e) {
             Log::error('Barcode generation failed: '.$e->getMessage());
