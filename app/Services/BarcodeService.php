@@ -33,7 +33,7 @@ class BarcodeService
             $newImageHeight = $imageHeight + 20; // Add 20px for the text
             $newImage = imagecreatetruecolor($imageWidth, $newImageHeight);
 
-            // Set background color to white
+            // Set background color to transparent
             $white = imagecolorallocate($newImage, 255, 255, 255);
             imagefill($newImage, 0, 0, $white);
 
@@ -52,15 +52,16 @@ class BarcodeService
             imagepng($newImage);
             $finalImageWithText = ob_get_clean();
 
-            // Clean up
-            imagedestroy($image);
-            imagedestroy($newImage);
 
-            $fileName = 'barcodes/'.$barcode.'-text.png';
+            $fileName = 'barcodes/'.$barcode.'text.png';
             Storage::disk('public')->put($fileName, $finalImageWithText);
 
             $fileName = 'barcodes/'.$barcode.'.png';
             Storage::disk('public')->put($fileName, $barcodeImage);
+
+            // Clean up
+            imagedestroy($image);
+            imagedestroy($newImage);
             return Storage::url($fileName);
         } catch (UnknownTypeException $e) {
             Log::error('Barcode generation failed: '.$e->getMessage());
