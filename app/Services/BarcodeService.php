@@ -30,20 +30,22 @@ class BarcodeService
             $imageHeight = imagesy($image);
 
             // Create a new image with extra space for the text
+            $paddingSide = 10;
             $newImageHeight = $imageHeight + 20; // Add 20px for the text
-            $newImage = imagecreatetruecolor($imageWidth + 20, $newImageHeight);
+            $newImageWidth = $imageWidth + $paddingSide * 2; // Add 20px for padding on the sides
+            $newImage = imagecreatetruecolor($newImageWidth, $newImageHeight);
 
             // Set background color to transparent
             $white = imagecolorallocate($newImage, 255, 255, 255);
             imagefill($newImage, 0, 0, $white);
 
             // Copy the barcode image onto the new image
-            imagecopy($newImage, $image, 10, 0, 0, 0, $imageWidth, $imageHeight);
+            imagecopy($newImage, $image, $paddingSide, 0, 0, 0, $imageWidth, $imageHeight);
 
             // Add text below the barcode
             $textColor = imagecolorallocate($newImage, 0, 0, 0); // Black color
             $font = 5; // Built-in font size
-            $textX = ($imageWidth - imagefontwidth($font) * strlen($barcode)) / 2; // Center the text
+            $textX = ($newImageWidth - imagefontwidth($font) * strlen($barcode)) / 2; // Center the text
             $textY = $imageHeight + 5; // Position the text 5px below the barcode
             imagestring($newImage, $font, $textX, $textY, $barcode, $textColor);
 
