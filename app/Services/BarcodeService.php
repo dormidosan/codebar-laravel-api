@@ -21,6 +21,44 @@ class BarcodeService
         try {
             $generator = new BarcodeGeneratorPNG();
             $barcodeImage = $generator->getBarcode($barcode, $generator::TYPE_CODE_128, 1, 60, [0, 1, 0]);
+
+            // Create an image from the barcode
+            $image = imagecreatefromstring($barcodeImage);
+
+            // Get the dimensions of the barcode image
+            $imageWidth = imagesx($image);
+            $imageHeight = imagesy($image);
+
+            // Create a new image with extra space for the text
+            $newImageHeight = $imageHeight + 20; // Add 20px for the text
+            $newImage = imagecreatetruecolor($imageWidth, $newImageHeight);
+
+            // Set background color to white
+            $white = imagecolorallocate($newImage, 255, 255, 255);
+            imagefill($newImage, 0, 0, $white);
+
+            // Copy the barcode image onto the new image
+            imagecopy($newImage, $image, 0, 0, 0, 0, $imageWidth, $imageHeight);
+
+            // Add text below the barcode
+            $textColor = imagecolorallocate($newImage, 0, 0, 0); // Black color
+            $font = 5; // Built-in font size
+            $textX = ($imageWidth - imagefontwidth($font) * strlen($barcode)) / 2; // Center the text
+            $textY = $imageHeight + 5; // Position the text 5px below the barcode
+            imagestring($newImage, $font, $textX, $textY, $barcode, $textColor);
+
+            // Save the new image
+            ob_start();
+            imagepng($newImage);
+            $finalImageWithText = ob_get_clean();
+
+            // Clean up
+            imagedestroy($image);
+            imagedestroy($newImage);
+
+            $fileName = 'barcodes/'.$barcode.'-text.png';
+            Storage::disk('public')->put($fileName, $finalImageWithText);
+
             $fileName = 'barcodes/'.$barcode.'.png';
             Storage::disk('public')->put($fileName, $barcodeImage);
             return Storage::url($fileName);
