@@ -31,14 +31,14 @@ class BarcodeService
 
             // Create a new image with extra space for the text
             $newImageHeight = $imageHeight + 20; // Add 20px for the text
-            $newImage = imagecreatetruecolor($imageWidth, $newImageHeight);
+            $newImage = imagecreatetruecolor($imageWidth + 20, $newImageHeight);
 
             // Set background color to transparent
             $white = imagecolorallocate($newImage, 255, 255, 255);
             imagefill($newImage, 0, 0, $white);
 
             // Copy the barcode image onto the new image
-            imagecopy($newImage, $image, 0, 0, 0, 0, $imageWidth, $imageHeight);
+            imagecopy($newImage, $image, 10, 0, 0, 0, $imageWidth, $imageHeight);
 
             // Add text below the barcode
             $textColor = imagecolorallocate($newImage, 0, 0, 0); // Black color
@@ -52,8 +52,7 @@ class BarcodeService
             imagepng($newImage);
             $finalImageWithText = ob_get_clean();
 
-
-            $fileName = 'barcodes/'.$barcode.'text.png';
+            $fileName = 'barcodes/'.$barcode.'-text.png';
             Storage::disk('public')->put($fileName, $finalImageWithText);
 
             $fileName = 'barcodes/'.$barcode.'.png';
