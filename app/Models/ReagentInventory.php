@@ -46,12 +46,21 @@ class ReagentInventory extends Model
 {
     /** @use HasFactory<ReagentInventoryFactory> */
     use HasFactory;
-    
+
     protected $fillable = ['reagent_id', 'barcode_type_id', 'barcode', 'image', 'lot', 'expiration_date', 'created_at', 'updated_at'];
+    protected $appends = ['image_with_text'];
 
     public function reagent(): BelongsTo
     {
         return $this->belongsTo(Reagent::class);
+    }
+
+    public function getImageWithTextAttribute(): string|null
+    {
+        if ($this->image) {
+            return str_replace('.png', '-text.png', $this->image);
+        }
+        return $this->image;
     }
 
     public function laboratoryReagents(): HasMany
