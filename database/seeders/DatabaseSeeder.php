@@ -16,33 +16,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
         //User departments seeder
         $this->call(DepartmentSeeder::class);
         $this->call(MunicipalitySeeder::class);
         $this->call(DistrictSeeder::class);
-
-        User::factory(20)->create();
-        Laboratory::factory(50)->create();
-
-        //8 Equipos seeder
-        $this->call(AnalyzerSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(LaboratorySeeder::class);
 
         $this->call(BarcodeTypeSeeder::class);
         $this->call(ReagentTypeSeeder::class);
-        //Reagent::factory(50)->create();
+        $this->call(AnalyzerSeeder::class);
         $this->call(ReagentSeeder::class);
 
-        AnalyzerReagent::factory(50)->create();
+        // Only run dev seeders in local environment
+        if (app()->environment('local')) {
+            User::factory(20)->create();
+            Laboratory::factory(50)->create();
 
-//
-        ReagentInventory::factory(50)->create();
-//
-        LaboratoryReagent::factory(50)->create();
+            //Reagent::factory(50)->create();
 
+            AnalyzerReagent::factory(50)->create();
+//
+            ReagentInventory::factory(50)->create();
+//
+            LaboratoryReagent::factory(50)->create();
+        }
     }
 }
