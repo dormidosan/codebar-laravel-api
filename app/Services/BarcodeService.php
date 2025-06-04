@@ -30,7 +30,7 @@ class BarcodeService
             $imageHeight = imagesy($image);
 
             // Create a new image with extra space for the text
-            $paddingSide = 10;
+            $paddingSide = 30;
             $newImageHeight = $imageHeight + 20; // Add 20 px for the text
             $newImageWidth = $imageWidth + $paddingSide * 2; // Add 20 px for padding on the sides
             $newImage = imagecreatetruecolor($newImageWidth, $newImageHeight);
