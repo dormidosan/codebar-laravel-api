@@ -9,6 +9,9 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::post('password/request-token', [AuthController::class, 'updatePasswordRequestToken']);
+Route::post('password/reset', [AuthController::class, 'updatePasswordRequest']);
+
 //File for API is barcode.php
 // TODO: change to use auth:sanctum
 //Route::prefix('v1')->group(base_path('routes/api/barcode.php'));

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             ['name' => 'Cristian Rogel', 'email' => 'cristianrogel@farlab.com'],
             ['name' => 'Romeo Campos', 'email' => 'romeocampos@farlab.com'],
             ['name' => 'Glen Flores', 'email' => 'glenflores@farlab.com'],
-            ['name' => 'Ester Hernández', 'email' => 'ester@farlab.com'],
+            ['name' => 'Ester Hernández', 'email' => 'esterhernandez@farlab.com'],
             ['name' => 'Pablo Pineda', 'email' => 'pablopineda@farlab.com'],
             ['name' => 'Javier López', 'email' => 'javierlopez@farlab.com'],
             ['name' => 'Javier Henríquez', 'email' => 'javierhenriquez@farlab.com'],
