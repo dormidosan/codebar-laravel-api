@@ -20,11 +20,11 @@ class AuthController extends Controller
         ]);
 
         if ($request->input('password') === 'password') {
-            return response()->json(['message' => 'Please change your password'], 403);
+            return response()->json(['message' => 'Por favor, actualize su contraseña'], 403);
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Credenciales inválidas'], 401);
         }
 
         $user = Auth::user();
