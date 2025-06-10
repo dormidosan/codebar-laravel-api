@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -16,7 +17,7 @@ class BarcodeService
      * @param  string  $type
      * @return string|null
      */
-    public function generateBarcode(string $barcode, string $type = 'C128'): ?string
+    public function generateBarcode(string $barcode, string $type = 'C128', string $lot = "", DateTime $expiration = null, string $name = ""): ?string
     {
         try {
             $generator = new BarcodeGeneratorPNG();
@@ -31,7 +32,7 @@ class BarcodeService
 
             // Create a new image with extra space for the text
             $paddingSide = 30;
-            $newImageHeight = $imageHeight + 20; // Add 20 px for the text
+            $newImageHeight = $imageHeight + 80; // Add 20 px for the text
             $newImageWidth = $imageWidth + $paddingSide * 2; // Add 20 px for padding on the sides
             $newImage = imagecreatetruecolor($newImageWidth, $newImageHeight);
 
@@ -45,9 +46,23 @@ class BarcodeService
             // Add text below the barcode
             $textColor = imagecolorallocate($newImage, 0, 0, 0); // Black color
             $font = 5; // Built-in font size
-            $textX = ($newImageWidth - imagefontwidth($font) * strlen($barcode)) / 2; // Center the text
-            $textY = $imageHeight + 5; // Position the text 5px below the barcode
-            imagestring($newImage, $font, $textX, $textY, $barcode, $textColor);
+            $textLines = [
+                $barcode,
+                $lot !== "" ? "Lot: $lot" : "",
+                $expiration ? "Exp: " . $expiration->format('Y-m-d') : "",
+                $name !== "" ? $name : "",
+            ];
+
+// Draw each line below the barcode
+            $textY = $imageHeight + 5;
+            foreach ($textLines as $line) {
+                if ($line !== "") {
+                    $textX = ($newImageWidth - imagefontwidth($font) * strlen($line)) / 2;
+                    imagestring($newImage, $font, $textX, $textY, $line, $textColor);
+                    $textY += imagefontheight($font) + 2; // Move to next line
+                }
+            }
+            //imagestring($newImage, $font, $textX, $textY, $barcode, $textColor);
 
             // Save the new image
             ob_start();
