@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use DateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -15,9 +14,12 @@ class BarcodeService
      *
      * @param  string  $barcode
      * @param  string  $type
+     * @param  string|null  $lot
+     * @param  string|null  $expiration
+     * @param  string|null  $name
      * @return string|null
      */
-    public function generateBarcode(string $barcode, string $type = 'C128', string $lot = "", DateTime $expiration = null, string $name = ""): ?string
+    public function generateBarcode(string $barcode, string $type = 'C128', ?string $lot = null, ?string $expiration = null, ?string $name = null): ?string
     {
         try {
             $generator = new BarcodeGeneratorPNG();
@@ -48,12 +50,12 @@ class BarcodeService
             $font = 5; // Built-in font size
             $textLines = [
                 $barcode,
-                $lot !== "" ? "Lot: $lot" : "",
-                $expiration ? "Exp: " . $expiration->format('Y-m-d') : "",
-                $name !== "" ? $name : "",
+                $name ? substr($name, 0, 20) : "",
+                $expiration ? "Exp: " . $expiration : "",
+                $lot  ? "Lot: $lot" : "",
             ];
 
-// Draw each line below the barcode
+            // Draw each line below the barcode
             $textY = $imageHeight + 5;
             foreach ($textLines as $line) {
                 if ($line !== "") {
@@ -62,7 +64,6 @@ class BarcodeService
                     $textY += imagefontheight($font) + 2; // Move to next line
                 }
             }
-            //imagestring($newImage, $font, $textX, $textY, $barcode, $textColor);
 
             // Save the new image
             ob_start();

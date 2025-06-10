@@ -43,21 +43,18 @@ class ReagentInventoryController extends Controller
             }
         }
 
-        $existingInventory = ReagentInventory::where('barcode', $request->get('barcode'))
-            //->where('barcode_type_id', $barcodeTypeId)
-            //->where('reagent_id', $request->get('reagent_id'))
-            ->first();
+        $existingInventory = ReagentInventory::with("reagent")->where('barcode', $request->get('barcode'))->first();
 
         if ($existingInventory) {
             return response()->json([
-                'message' => 'Reagent inventory with the same barcode already exists',
+                'message' => ' Código de barras ya existe',
                 'data' => $existingInventory
             ], 409);
         }
 
         $reagentInventory->fill($request->all());
         $reagentInventory->barcode_type_id = $barcodeTypeId;
-        $expiration = $reagentInventory->expiration_date ? new \DateTime($reagentInventory->expiration_date) : null;
+        $expiration = $reagentInventory->expiration_date;
         $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, $barcodeName ?? 'C128', $reagentInventory->lot ?? "", $expiration,
             $reagentInventory->reagent->name ?? null);
 
