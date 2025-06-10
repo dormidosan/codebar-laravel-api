@@ -55,6 +55,11 @@ class ReagentInventoryController extends Controller
         $reagentInventory->fill($request->all());
         $reagentInventory->barcode_type_id = $barcodeTypeId;
         $expiration = $reagentInventory->expiration_date;
+                
+        if (!empty($expiration) && strtotime($expiration) < strtotime(date('Y-m-d'))) {
+            return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
+        }
+
         $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, $barcodeName ?? 'C128', $reagentInventory->lot ?? "", $expiration,
             $reagentInventory->reagent->name ?? null);
 

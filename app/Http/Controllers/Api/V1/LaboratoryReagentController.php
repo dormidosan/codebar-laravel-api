@@ -91,6 +91,7 @@ class LaboratoryReagentController extends Controller
         }
 
         $reagentInventory = ReagentInventory::where('reagent_id', $reagentId)
+            ->where('expiration_date', '>', now())
             ->whereDoesntHave('laboratoryReagents', function ($query) use ($laboratoryId) {
                 $query->where('laboratory_id', $laboratoryId);
             })->orderBy('expiration_date')->first();
