@@ -21,6 +21,8 @@ Route::post('laboratory-reagents/assign', [LaboratoryReagentController::class, '
     ->name('laboratory-reagents.assign');
 Route::apiResource('laboratory-reagents', LaboratoryReagentController::class);
 
+Route::get('reagent-inventories/{barcode}/check', [ReagentInventoryController::class, 'checkBarcode'])
+    ->name('reagent-inventories.check-barcode');
 Route::apiResource('reagent-inventories', ReagentInventoryController::class);
 
 // TODO: Delete this route when the frontend is ready

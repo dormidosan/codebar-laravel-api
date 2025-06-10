@@ -114,22 +114,9 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory]);
     }
 
-    // check if barcode is unique
-    public function checkBarcode(Request $request): JsonResponse
+    public function checkBarcode(string $barcode): JsonResponse
     {
-        $barcode = $request->get('barcode');
-        $barcodeTypeId = BarcodeTypes::CODE128;
-        if ($request->has('barcode_type_id')) {
-            $barcodeTypeId = $request->get('barcode_type_id');
-        }
-        if ($request->has('barcode_type_name')) {
-            $barcodeTypeId = BarcodeType::where('name', $request->get('barcode_type_name'))
-                ->first()
-                ->id;
-        }
-        $reagentInventory = ReagentInventory::where('barcode', $barcode)
-            ->where('barcode_type_id', $barcodeTypeId)
-            ->first();
+        $reagentInventory = ReagentInventory::with("reagent")->where('barcode', $barcode)->first();
         if (empty($reagentInventory)) {
             return response()->json(['message' => 'Barcode is unique', 'data' => []]);
         }
