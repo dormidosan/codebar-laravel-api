@@ -44,7 +44,7 @@ class ReagentInventoryController extends Controller
         }
 
         $existingInventory = ReagentInventory::where('barcode', $request->get('barcode'))
-            ->where('barcode_type_id', $barcodeTypeId)
+            //->where('barcode_type_id', $barcodeTypeId)
             //->where('reagent_id', $request->get('reagent_id'))
             ->first();
 
