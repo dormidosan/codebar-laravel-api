@@ -23,10 +23,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $expiration_date
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property-read \App\Models\BarcodeType $barcodeType
- * @property-read Collection<int, \App\Models\LaboratoryReagent> $laboratoryReagents
+ * @property-read BarcodeType $barcodeType
+ * @property-read Collection<int, LaboratoryReagent> $laboratoryReagents
  * @property-read int|null $laboratory_reagents_count
- * @property-read \App\Models\Reagent $reagent
+ * @property-read Reagent $reagent
  * @method static \Database\Factories\ReagentInventoryFactory factory($count = null, $state = [])
  * @method static Builder<static>|ReagentInventory newModelQuery()
  * @method static Builder<static>|ReagentInventory newQuery()

@@ -128,5 +128,26 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory]);
     }
 
+    public function generateMissingImage(BarcodeService $barcodeService): JsonResponse
+    {
+        $reagentInventories = ReagentInventory::with('reagent')->whereNull('image')->get();
+        if ($reagentInventories->isEmpty()) {
+            return response()->json(['message' => 'No reagent inventories found without image', 'data' => []], 400);
+        }
+
+        foreach ($reagentInventories as $reagentInventory) {
+            $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, 'C128', $reagentInventory->lot ?? "", $reagentInventory->expiration_date,
+                $reagentInventory->reagent->name ?? null);
+            if ($imageURL) {
+                $reagentInventory->image = $imageURL;
+                $reagentInventory->save();
+            }
+        }
+
+        return response()->json(['message' => 'Missing images generated', 'data' => $reagentInventories]);
+
+    }
+
+
 }
 
