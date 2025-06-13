@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $area
@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder<static>|Analyzer whereArea($value)
  * @method static Builder<static>|Analyzer whereId($value)
  * @method static Builder<static>|Analyzer whereName($value)
- * @mixin IdeHelperAnalyzer
  * @mixin Eloquent
  */
 class Analyzer extends Model

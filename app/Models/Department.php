@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $code
@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|Department whereCode($value)
  * @method static Builder<static>|Department whereId($value)
  * @method static Builder<static>|Department whereName($value)
- * @mixin IdeHelperDepartment
  * @mixin Eloquent
  */
 class Department extends Model

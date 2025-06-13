@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|ReagentType query()
  * @method static Builder<static>|ReagentType whereId($value)
  * @method static Builder<static>|ReagentType whereName($value)
- * @mixin IdeHelperReagentType
  * @mixin Eloquent
  */
 class ReagentType extends Model

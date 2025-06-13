@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $department_id
@@ -27,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|District whereId($value)
  * @method static Builder<static>|District whereMunicipalityId($value)
  * @method static Builder<static>|District whereName($value)
- * @mixin IdeHelperDistrict
  * @mixin Eloquent
  */
 class District extends Model

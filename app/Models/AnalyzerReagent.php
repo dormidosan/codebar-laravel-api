@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $analyzer_id
@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder<static>|AnalyzerReagent whereAnalyzerId($value)
  * @method static Builder<static>|AnalyzerReagent whereId($value)
  * @method static Builder<static>|AnalyzerReagent whereReagentId($value)
- * @mixin IdeHelperAnalyzerReagent
  * @mixin Eloquent
  */
 class AnalyzerReagent extends Model

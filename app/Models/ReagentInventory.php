@@ -12,15 +12,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $reagent_id
  * @property int $barcode_type_id
+ * @property int $user_id User who created the reagent inventory record
  * @property string $barcode
  * @property string|null $image
  * @property string $lot
  * @property string $expiration_date
+ * @property-read string|null $image_with_text
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property-read BarcodeType $barcodeType
@@ -40,9 +42,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|ReagentInventory whereLot($value)
  * @method static Builder<static>|ReagentInventory whereReagentId($value)
  * @method static Builder<static>|ReagentInventory whereUpdatedAt($value)
- * @mixin IdeHelperReagentInventory
- * @property int $user_id User who created the reagent inventory record
- * @property-read string|null $image_with_text
  * @method static Builder<static>|ReagentInventory whereUserId($value)
  * @mixin Eloquent
  */

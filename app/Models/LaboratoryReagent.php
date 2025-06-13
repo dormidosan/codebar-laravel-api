@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $laboratory_id
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Laboratory $laboratory
  * @property-read ReagentInventory $reagentInventory
  * @property-read User $user
- * @method static \Database\Factories\LaboratoryReagentFactory factory($count = null, $state = [])
+ * @method static LaboratoryReagentFactory factory($count = null, $state = [])
  * @method static Builder<static>|LaboratoryReagent newModelQuery()
  * @method static Builder<static>|LaboratoryReagent newQuery()
  * @method static Builder<static>|LaboratoryReagent query()
@@ -31,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder<static>|LaboratoryReagent whereReagentInventoryId($value)
  * @method static Builder<static>|LaboratoryReagent whereUpdatedAt($value)
  * @method static Builder<static>|LaboratoryReagent whereUserId($value)
- * @mixin IdeHelperLaboratoryReagent
  * @mixin Eloquent
  */
 class LaboratoryReagent extends Model
