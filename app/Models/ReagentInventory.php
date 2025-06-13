@@ -83,4 +83,9 @@ class ReagentInventory extends Model
     {
         return $this->belongsTo(BarcodeType::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

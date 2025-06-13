@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasMany(LaboratoryReagent::class);
     }
 
+    public function reagentInventories(): HasMany
+    {
+        return $this->hasMany(ReagentInventory::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
