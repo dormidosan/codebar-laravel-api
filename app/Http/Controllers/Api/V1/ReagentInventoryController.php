@@ -15,7 +15,12 @@ class ReagentInventoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $reagentInventories = ReagentInventory::with('reagent')->get();
+        $reagentInventories = ReagentInventory::query()
+            ->with('reagent')
+            ->with('user')
+            ->latest()
+            ->take(50)
+            ->get();
         if ($reagentInventories->isEmpty()) {
             return response()->json(['message' => 'Reagent inventories not found', 'data' => []], 400);
         }
