@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  *
  *
- * @mixin IdeHelperReagent
  * @property int $id
  * @property int $reagent_type_id
  * @property string $code
