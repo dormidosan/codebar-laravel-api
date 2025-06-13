@@ -14,7 +14,7 @@ return new class extends Migration {
             if (!Schema::hasColumn('reagent_inventories', 'user_id')) {
                 $table->foreignId('user_id')
                     ->default(1) // Default to 1, assuming user with ID 1 is the system user
-                    ->after('expiration_date')
+                    ->after('barcode_type_id') 
                     ->comment('User who created the reagent inventory record')
                     ->constrained('users')
                     ->restrictOnDelete();
