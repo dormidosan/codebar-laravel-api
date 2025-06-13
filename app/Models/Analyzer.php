@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $area
  * @property string $name
- * @property-read Collection<int, \App\Models\Reagent> $reagents
+ * @property-read Collection<int, Reagent> $reagents
  * @property-read int|null $reagents_count
  * @method static Builder<static>|Analyzer newModelQuery()
  * @method static Builder<static>|Analyzer newQuery()
@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder<static>|Analyzer whereArea($value)
  * @method static Builder<static>|Analyzer whereId($value)
  * @method static Builder<static>|Analyzer whereName($value)
+ * @mixin IdeHelperAnalyzer
  * @mixin Eloquent
  */
 class Analyzer extends Model

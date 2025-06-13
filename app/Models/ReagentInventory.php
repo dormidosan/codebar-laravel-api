@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $reagent_id
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection<int, LaboratoryReagent> $laboratoryReagents
  * @property-read int|null $laboratory_reagents_count
  * @property-read Reagent $reagent
- * @method static \Database\Factories\ReagentInventoryFactory factory($count = null, $state = [])
+ * @method static ReagentInventoryFactory factory($count = null, $state = [])
  * @method static Builder<static>|ReagentInventory newModelQuery()
  * @method static Builder<static>|ReagentInventory newQuery()
  * @method static Builder<static>|ReagentInventory query()
@@ -40,6 +40,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|ReagentInventory whereLot($value)
  * @method static Builder<static>|ReagentInventory whereReagentId($value)
  * @method static Builder<static>|ReagentInventory whereUpdatedAt($value)
+ * @mixin IdeHelperReagentInventory
+ * @property int $user_id User who created the reagent inventory record
+ * @property-read string|null $image_with_text
+ * @method static Builder<static>|ReagentInventory whereUserId($value)
  * @mixin Eloquent
  */
 class ReagentInventory extends Model
@@ -55,6 +59,14 @@ class ReagentInventory extends Model
         return $this->belongsTo(Reagent::class);
     }
 
+    /**
+     * Get the image with text attribute, for JSON response. (image_with_text)
+     *
+     * This method checks if the image exists and modifies the filename to include '-text' before the file extension.
+     * If the image does not exist, it returns null.
+     *
+     * @return string|null
+     */
     public function getImageWithTextAttribute(): string|null
     {
         if ($this->image) {

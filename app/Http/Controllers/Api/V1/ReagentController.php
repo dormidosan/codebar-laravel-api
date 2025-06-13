@@ -11,14 +11,15 @@ class ReagentController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        if ($request->get("counting")) {
-            $reagents = Reagent::with('reagentType')
-                ->withCount('reagentInventory')
-                ->get();
+        $query = Reagent::with('reagentType')
+            ->where('active', true)
+            ->orderBy('position');
+
+        if ($request->get('counting')) {
+            $query->withCount('reagentInventory');
         }
-        else {
-            $reagents = Reagent::with('reagentType')->get();
-        }
+
+        $reagents = $query->get();
 
         if ($reagents->isEmpty()) {
             return response()->json(['message' => 'Reagents not found', 'data' => []], 400);

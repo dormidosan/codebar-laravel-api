@@ -52,8 +52,10 @@ class ReagentInventoryController extends Controller
             ], 409);
         }
 
+        $userId = $request->user('sanctum') ? $request->user('sanctum')->id : 1;
         $reagentInventory->fill($request->all());
         $reagentInventory->barcode_type_id = $barcodeTypeId;
+        $reagentInventory->user_id = $userId;
         $expiration = $reagentInventory->expiration_date;
                 
         if (!empty($expiration) && strtotime($expiration) < strtotime(date('Y-m-d'))) {
@@ -130,7 +132,7 @@ class ReagentInventoryController extends Controller
 
     public function generateMissingImage(BarcodeService $barcodeService): JsonResponse
     {
-        $reagentInventories = ReagentInventory::with('reagent')->whereNull('image')->get();
+        $reagentInventories = ReagentInventory::with('reagent')->get();
         if ($reagentInventories->isEmpty()) {
             return response()->json(['message' => 'No reagent inventories found without image', 'data' => []], 400);
         }
@@ -144,7 +146,7 @@ class ReagentInventoryController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Missing images generated', 'data' => $reagentInventories]);
+        return response()->json(['message' => 'Images re-generated', 'data' => $reagentInventories]);
 
     }
 

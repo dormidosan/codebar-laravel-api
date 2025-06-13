@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $district_id
@@ -21,10 +21,10 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\District $district
- * @property-read Collection<int, \App\Models\LaboratoryReagent> $laboratoryReagents
+ * @property-read District $district
+ * @property-read Collection<int, LaboratoryReagent> $laboratoryReagents
  * @property-read int|null $laboratory_reagents_count
- * @method static \Database\Factories\LaboratoryFactory factory($count = null, $state = [])
+ * @method static LaboratoryFactory factory($count = null, $state = [])
  * @method static Builder<static>|Laboratory newModelQuery()
  * @method static Builder<static>|Laboratory newQuery()
  * @method static Builder<static>|Laboratory query()
@@ -34,6 +34,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Laboratory whereId($value)
  * @method static Builder<static>|Laboratory whereName($value)
  * @method static Builder<static>|Laboratory whereUpdatedAt($value)
+ * @mixin IdeHelperLaboratory
+ * @property int $type 1- public, 2- private, 3- veterinary, 4- research, 5- other, 0- not specified
+ * @method static Builder<static>|Laboratory whereType($value)
  * @mixin Eloquent
  */
 class Laboratory extends Model

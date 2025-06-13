@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $department_id
  * @property string $name
- * @property-read \App\Models\Department $department
- * @property-read Collection<int, \App\Models\District> $districts
+ * @property-read Department $department
+ * @property-read Collection<int, District> $districts
  * @property-read int|null $districts_count
  * @method static Builder<static>|Municipality newModelQuery()
  * @method static Builder<static>|Municipality newQuery()
@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|Municipality whereDepartmentId($value)
  * @method static Builder<static>|Municipality whereId($value)
  * @method static Builder<static>|Municipality whereName($value)
+ * @mixin IdeHelperMunicipality
  * @mixin Eloquent
  */
 class Municipality extends Model

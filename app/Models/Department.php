@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $code
  * @property string $name
- * @property-read Collection<int, \App\Models\District> $districts
+ * @property-read Collection<int, District> $districts
  * @property-read int|null $districts_count
- * @property-read Collection<int, \App\Models\Municipality> $municipalities
+ * @property-read Collection<int, Municipality> $municipalities
  * @property-read int|null $municipalities_count
  * @method static Builder<static>|Department newModelQuery()
  * @method static Builder<static>|Department newQuery()
@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|Department whereCode($value)
  * @method static Builder<static>|Department whereId($value)
  * @method static Builder<static>|Department whereName($value)
+ * @mixin IdeHelperDepartment
  * @mixin Eloquent
  */
 class Department extends Model
