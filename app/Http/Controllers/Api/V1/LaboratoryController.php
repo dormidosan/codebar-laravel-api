@@ -21,6 +21,10 @@ class LaboratoryController extends Controller
             }
         });
 
+        if ($request->has('type')) {
+            $query->where('type', $request->get('type'));
+        }
+
         $laboratories = $query->with('district')->get();
 
         if ($laboratories->isEmpty()) {
