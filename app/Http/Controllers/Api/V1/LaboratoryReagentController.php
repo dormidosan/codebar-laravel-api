@@ -21,8 +21,7 @@ class LaboratoryReagentController extends Controller
             }
         }
 
-        // Eager load relationships based on request
-        if ($request->boolean('filters')) {
+        if ($request->boolean('with_eager_loading')) {
             $with = [];
             if ($request->boolean('with_user')) {
                 $with[] = 'user';
