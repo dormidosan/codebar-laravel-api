@@ -13,17 +13,30 @@ class LaboratoryReagentController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = LaboratoryReagent::query();
-        if ($request->filled("laboratory_id")) {
-            $query->where('laboratory_id', $request->get('laboratory_id'));
-        }
-        if ($request->filled("reagent_inventory_id")) {
-            $query->where('reagent_inventory_id', $request->get('reagent_inventory_id'));
-        }
-        if ($request->filled("user_id")) {
-            $query->where('user_id', $request->get('user_id'));
+
+        // Apply filters
+        foreach (['laboratory_id', 'reagent_inventory_id', 'user_id'] as $field) {
+            if ($request->filled($field)) {
+                $query->where($field, $request->get($field));
+            }
         }
 
-        $laboratoryReagents = $query->with('reagentInventory', 'user', 'reagentInventory.reagent')
+        // Eager load relationships based on request
+        $with = [];
+        if ($request->boolean('with_user')) {
+            $with[] = 'user';
+        }
+        if ($request->boolean('with_reagent_inventory')) {
+            $with[] = 'reagentInventory';
+            if ($request->boolean('with_reagent')) {
+                $with[] = 'reagentInventory.reagent';
+            }
+        }
+        if (!empty($with)) {
+            $query->with($with);
+        }
+
+        $laboratoryReagents = $query
             ->orderBy('id', 'desc')
             ->get();
         if ($laboratoryReagents->isEmpty()) {
