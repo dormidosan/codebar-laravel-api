@@ -18,8 +18,8 @@ class ReagentInventoryController extends Controller
         $query = ReagentInventory::query()
             ->with('user');
 
-        if ($request->filled("reagent_type_id")) {
-            $query->where('reagent_type_id', $request->get('reagent_type_id'));
+        if ($request->filled("reagent_id")) {
+            $query->where('reagent_id', $request->get('reagent_id'));
         }
         else {
             $query->with('reagent');
