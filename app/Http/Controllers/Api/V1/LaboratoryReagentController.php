@@ -26,6 +26,9 @@ class LaboratoryReagentController extends Controller
             if ($request->boolean('with_user')) {
                 $with[] = 'user';
             }
+            if ($request->boolean('with_laboratory')) {
+                $with[] = 'laboratory';
+            }
             if ($request->boolean('with_reagent_inventory')) {
                 $with[] = 'reagentInventory';
                 if ($request->boolean('with_reagent')) {
