@@ -13,14 +13,23 @@ use Illuminate\Http\Request;
 
 class ReagentInventoryController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $reagentInventories = ReagentInventory::query()
-            ->with('reagent')
-            ->with('user')
+        $query = ReagentInventory::query()
+            ->with('user');
+
+        if ($request->filled("reagent_type_id")) {
+            $query->where('reagent_type_id', $request->get('reagent_type_id'));
+        }
+        else {
+            $query->with('reagent');
+        }
+
+        $reagentInventories = $query
             ->latest()
             ->take(50)
             ->get();
+
         if ($reagentInventories->isEmpty()) {
             return response()->json(['message' => 'Reagent inventories not found', 'data' => []], 400);
         }
@@ -62,7 +71,7 @@ class ReagentInventoryController extends Controller
         $reagentInventory->barcode_type_id = $barcodeTypeId;
         $reagentInventory->user_id = $userId;
         $expiration = $reagentInventory->expiration_date;
-                
+
         if (!empty($expiration) && strtotime($expiration) < strtotime(date('Y-m-d'))) {
             return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
         }
@@ -154,7 +163,6 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Images re-generated', 'data' => $reagentInventories]);
 
     }
-
 
 }
 
