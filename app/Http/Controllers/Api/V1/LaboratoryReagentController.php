@@ -22,18 +22,23 @@ class LaboratoryReagentController extends Controller
         }
 
         // Eager load relationships based on request
-        $with = [];
-        if ($request->boolean('with_user')) {
-            $with[] = 'user';
-        }
-        if ($request->boolean('with_reagent_inventory')) {
-            $with[] = 'reagentInventory';
-            if ($request->boolean('with_reagent')) {
-                $with[] = 'reagentInventory.reagent';
+        if ($request->boolean('filters')) {
+            $with = [];
+            if ($request->boolean('with_user')) {
+                $with[] = 'user';
+            }
+            if ($request->boolean('with_reagent_inventory')) {
+                $with[] = 'reagentInventory';
+                if ($request->boolean('with_reagent')) {
+                    $with[] = 'reagentInventory.reagent';
+                }
+            }
+            if (!empty($with)) {
+                $query->with($with);
             }
         }
-        if (!empty($with)) {
-            $query->with($with);
+        else {
+            $query->with('reagentInventory', 'user', 'reagentInventory.reagent');
         }
 
         $laboratoryReagents = $query
