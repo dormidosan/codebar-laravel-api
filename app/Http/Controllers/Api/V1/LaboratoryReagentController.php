@@ -47,7 +47,7 @@ class LaboratoryReagentController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         if ($laboratoryReagents->isEmpty()) {
-            return response()->json(['message' => 'Laboratory reagents not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory reagents not found', 'data' => []]);
         }
         return response()->json(['message' => 'Laboratory reagents found', 'data' => $laboratoryReagents]);
     }
@@ -67,7 +67,7 @@ class LaboratoryReagentController extends Controller
     {
         $laboratoryReagent = LaboratoryReagent::find($id);
         if (empty($laboratoryReagent)) {
-            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 404);
         }
         return response()->json(['message' => 'Laboratory reagent found', 'data' => $laboratoryReagent]);
     }
@@ -76,7 +76,7 @@ class LaboratoryReagentController extends Controller
     {
         $laboratoryReagent = LaboratoryReagent::find($id);
         if (empty($laboratoryReagent)) {
-            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 404);
         }
 
         $laboratoryReagent->fill($request->all());
@@ -92,7 +92,7 @@ class LaboratoryReagentController extends Controller
     {
         $laboratoryReagent = LaboratoryReagent::find($id);
         if (empty($laboratoryReagent)) {
-            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory reagent not found', 'data' => []], 404);
         }
         if (!$laboratoryReagent->delete()) {
             return response()->json(['message' => 'Laboratory reagent not deleted', 'data' => $laboratoryReagent], 500);
@@ -117,7 +117,7 @@ class LaboratoryReagentController extends Controller
             })->orderBy('expiration_date')->first();
 
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'No free reagent found', 'data' => []], 400);
+            return response()->json(['message' => 'No free reagent found', 'data' => []], 404);
         }
 
         // TODO: Remove the sanctum user_id hardcoded

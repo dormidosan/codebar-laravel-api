@@ -31,7 +31,7 @@ class ReagentInventoryController extends Controller
             ->get();
 
         if ($reagentInventories->isEmpty()) {
-            return response()->json(['message' => 'Reagent inventories not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent inventories not found', 'data' => []]);
         }
         return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories]);
     }
@@ -57,7 +57,10 @@ class ReagentInventoryController extends Controller
             }
         }
 
-        $existingInventory = ReagentInventory::with("reagent")->where('barcode', $request->get('barcode'))->first();
+        $existingInventory = ReagentInventory::query()
+            ->with("reagent")
+            ->where('barcode', $request->get('barcode'))
+            ->first();
 
         if ($existingInventory) {
             return response()->json([
@@ -66,18 +69,26 @@ class ReagentInventoryController extends Controller
             ], 409);
         }
 
-        $userId = $request->user('sanctum') ? $request->user('sanctum')->id : 1;
+        $userId = $request->user('sanctum')
+            ? $request->user('sanctum')->id
+            : 1;
+
         $reagentInventory->fill($request->all());
         $reagentInventory->barcode_type_id = $barcodeTypeId;
         $reagentInventory->user_id = $userId;
         $expiration = $reagentInventory->expiration_date;
 
+        // If there is expiration date, check that is not in the past
         if (!empty($expiration) && strtotime($expiration) < strtotime(date('Y-m-d'))) {
             return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
         }
 
-        $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, $barcodeName ?? 'C128', $reagentInventory->lot ?? "", $expiration,
-            $reagentInventory->reagent->name ?? null);
+        $imageURL = $barcodeService
+            ->generateBarcode($reagentInventory->barcode,
+                $barcodeName ?? 'C128',
+                $reagentInventory->lot ?? "",
+                $expiration,
+                $reagentInventory->reagent->name ?? null);
 
         if ($imageURL) {
             $reagentInventory->image = $imageURL;
@@ -93,10 +104,13 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventory = ReagentInventory::with('reagent')->find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 404);
         }
         if (empty($reagentInventory->image)) {
-            $imageUrl = $barcodeService->generateBarcode($reagentInventory->barcode);
+            $imageUrl = $barcodeService->generateBarcode($reagentInventory->barcode, $barcodeName ?? 'C128', $reagentInventory->lot ?? "",
+                $reagentInventory->expiration_date,
+                $reagentInventory->reagent->name ?? null);
+
             if ($imageUrl) {
                 $reagentInventory->image = $imageUrl;
                 $reagentInventory->save();
@@ -111,7 +125,7 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventory = ReagentInventory::find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 404);
         }
 
         $reagentInventory->fill($request->all());
@@ -127,7 +141,7 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventory = ReagentInventory::find($id);
         if (empty($reagentInventory)) {
-            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent inventory not found', 'data' => []], 404);
         }
         if (!$reagentInventory->delete()) {
             return response()->json(['message' => 'Reagent inventory not deleted', 'data' => $reagentInventory], 500);
@@ -139,6 +153,7 @@ class ReagentInventoryController extends Controller
     {
         $reagentInventory = ReagentInventory::with("reagent")->where('barcode', $barcode)->first();
         if (empty($reagentInventory)) {
+            // This should be 404, but we want to allow creation of new reagent inventory
             return response()->json(['message' => 'Barcode is unique', 'data' => []]);
         }
         return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory]);
@@ -150,7 +165,7 @@ class ReagentInventoryController extends Controller
         if ($reagentInventories->isEmpty()) {
             return response()->json(['message' => 'No reagent inventories found without image', 'data' => []], 400);
         }
-
+        /** @var ReagentInventory $reagentInventory */
         foreach ($reagentInventories as $reagentInventory) {
             $imageURL = $barcodeService->generateBarcode($reagentInventory->barcode, 'C128', $reagentInventory->lot ?? "", $reagentInventory->expiration_date,
                 $reagentInventory->reagent->name ?? null);
@@ -161,7 +176,6 @@ class ReagentInventoryController extends Controller
         }
 
         return response()->json(['message' => 'Images re-generated', 'data' => $reagentInventories]);
-
     }
 
 }

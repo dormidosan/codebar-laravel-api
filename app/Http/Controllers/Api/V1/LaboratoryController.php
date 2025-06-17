@@ -28,7 +28,7 @@ class LaboratoryController extends Controller
         $laboratories = $query->with('district')->get();
 
         if ($laboratories->isEmpty()) {
-            return response()->json(['message' => 'Laboratories not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratories not found', 'data' => []]);
         }
         return response()->json(['message' => 'Laboratories found', 'data' => $laboratories, 'count' => count($laboratories)]);
     }
@@ -47,7 +47,7 @@ class LaboratoryController extends Controller
     {
         $laboratory = Laboratory::with('district')->find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 404);
         }
         return response()->json(['message' => 'Laboratory found', 'data' => $laboratory]);
     }
@@ -56,7 +56,7 @@ class LaboratoryController extends Controller
     {
         $laboratory = Laboratory::find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 404);
         }
 
         $laboratory->fill($request->all());
@@ -72,7 +72,7 @@ class LaboratoryController extends Controller
     {
         $laboratory = Laboratory::find($id);
         if (empty($laboratory)) {
-            return response()->json(['message' => 'Laboratory not found', 'data' => []], 400);
+            return response()->json(['message' => 'Laboratory not found', 'data' => []], 404);
         }
         if (!$laboratory->delete()) {
             return response()->json(['message' => 'Laboratory not deleted', 'data' => $laboratory], 500);

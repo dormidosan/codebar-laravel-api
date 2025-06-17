@@ -13,7 +13,7 @@ class AnalyzerController extends Controller
     {
         $analyzers = Analyzer::all();
         if ($analyzers->isEmpty()) {
-            return response()->json(['message' => 'Analyzers not found', 'data' => []], 400);
+            return response()->json(['message' => 'Analyzers not found', 'data' => []]);
         }
         return response()->json(['message' => 'Analyzers found', 'data' => $analyzers]);
 
@@ -34,7 +34,7 @@ class AnalyzerController extends Controller
     {
         $analyzer = Analyzer::find($id);
         if (empty($analyzer)) {
-            return response()->json(['message' => 'Analyzer not found', 'data' => []], 400);
+            return response()->json(['message' => 'Analyzer not found', 'data' => []], 404);
         }
         return response()->json(['message' => 'Analyzer found', 'data' => $analyzer]);
     }
@@ -43,7 +43,7 @@ class AnalyzerController extends Controller
     {
         $analyzer = Analyzer::find($id);
         if (empty($analyzer)) {
-            return response()->json(['message' => 'Analyzer not found', 'data' => []], 400);
+            return response()->json(['message' => 'Analyzer not found', 'data' => []], 404);
         }
 
         $analyzer->fill($request->all());
@@ -58,7 +58,7 @@ class AnalyzerController extends Controller
     {
         $analyzer = Analyzer::find($id);
         if (empty($analyzer)) {
-            return response()->json(['message' => 'Analyzer not found', 'data' => []], 400);
+            return response()->json(['message' => 'Analyzer not found', 'data' => []], 404);
         }
         if (!$analyzer->delete()) {
             return response()->json(['message' => 'Analyzer not deleted', 'data' => $analyzer], 500);

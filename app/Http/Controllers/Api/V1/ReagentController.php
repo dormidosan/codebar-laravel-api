@@ -22,7 +22,7 @@ class ReagentController extends Controller
         $reagents = $query->get();
 
         if ($reagents->isEmpty()) {
-            return response()->json(['message' => 'Reagents not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagents not found', 'data' => []]);
         }
         return response()->json(['message' => 'Success', 'data' => $reagents]);
     }
@@ -41,8 +41,7 @@ class ReagentController extends Controller
     {
         $reagent = Reagent::find($id);
         if (empty($reagent)) {
-            return response()->json(['message' => 'Reagent not found', 'data' => []], 400);
-
+            return response()->json(['message' => 'Reagent not found', 'data' => []], 404);
         }
         return response()->json(['message' => 'Success', 'data' => $reagent]);
     }
@@ -51,7 +50,7 @@ class ReagentController extends Controller
     {
         $reagent = Reagent::find($id);
         if (empty($reagent)) {
-            return response()->json(['message' => 'Reagent not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent not found', 'data' => []], 404);
         }
 
         $reagent->fill($request->all());
@@ -66,7 +65,7 @@ class ReagentController extends Controller
     {
         $reagent = Reagent::find($id);
         if (!$reagent) {
-            return response()->json(['message' => 'Reagent not found', 'data' => []], 400);
+            return response()->json(['message' => 'Reagent not found', 'data' => []], 404);
         }
         if (!$reagent->delete()) {
             return response()->json(['message' => 'Reagent not deleted', 'data' => $reagent], 500);
