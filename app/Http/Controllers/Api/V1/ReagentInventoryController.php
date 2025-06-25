@@ -79,7 +79,8 @@ class ReagentInventoryController extends Controller
         $expiration = $reagentInventory->expiration_date;
 
         // If there is expiration date, check that is not in the past
-        if (!empty($expiration) && strtotime($expiration) < strtotime(date('Y-m-d'))) {
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+        if (!empty($expiration) && strtotime($expiration) < strtotime($tomorrow)) {
             return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
         }
 
