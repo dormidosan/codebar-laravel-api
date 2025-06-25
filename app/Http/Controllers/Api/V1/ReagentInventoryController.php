@@ -10,6 +10,7 @@ use App\Services\BarcodeService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReagentInventoryController extends Controller
 {
@@ -83,6 +84,10 @@ class ReagentInventoryController extends Controller
         if (!empty($expiration) && strtotime($expiration) < strtotime($tomorrow)) {
             return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
         }
+        // Store in laravel.log the expiration date
+        Log::info('Expiration date: '.$expiration);
+        Log::info('Barcode type id: '.$barcodeTypeId);
+        Log::info('Tomorrow date: '.$tomorrow);
 
         $imageURL = $barcodeService
             ->generateBarcode($reagentInventory->barcode,
