@@ -81,13 +81,14 @@ class ReagentInventoryController extends Controller
 
         // If there is expiration date, check that is not in the past
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
-        if (!empty($expiration) && strtotime($expiration) < strtotime($tomorrow)) {
-            return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
-        }
         // Store in laravel.log the expiration date
         Log::info('Expiration date: '.$expiration);
         Log::info('Barcode type id: '.$barcodeTypeId);
         Log::info('Tomorrow date: '.$tomorrow);
+        if (!empty($expiration) && strtotime($expiration) < strtotime($tomorrow)) {
+            return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
+        }
+
 
         $imageURL = $barcodeService
             ->generateBarcode($reagentInventory->barcode,
