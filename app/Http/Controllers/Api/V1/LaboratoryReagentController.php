@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\LaboratoryReagent;
-use App\Models\ReagentInventory;
+use App\Services\LaboratoryReagentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -100,35 +100,15 @@ class LaboratoryReagentController extends Controller
         return response()->json(['message' => 'Laboratory reagent deleted', 'data' => $laboratoryReagent]);
     }
 
-    public function assign(Request $request): JsonResponse
+    public function assign(Request $request, LaboratoryReagentService $labService): JsonResponse
     {
-        $laboratoryReagent = new LaboratoryReagent();
-        $reagentId = $request->get('reagent_id');
-        $laboratoryId = $request->get('laboratory_id');
-
-        if (empty($reagentId) || empty($laboratoryId)) {
-            return response()->json(['message' => 'Reagent ID and Laboratory ID are required', 'data' => []], 400);
-        }
-
-        $reagentInventory = ReagentInventory::where('reagent_id', $reagentId)
-            ->where('expiration_date', '>', now())
-            ->whereDoesntHave('laboratoryReagents', function ($query) use ($laboratoryId) {
-                $query->where('laboratory_id', $laboratoryId);
-            })->orderBy('expiration_date')->first();
-
-        if (empty($reagentInventory)) {
-            return response()->json(['message' => 'No free reagent found', 'data' => []], 404);
-        }
-
-        // TODO: Remove the sanctum user_id hardcoded
         $userId = $request->user('sanctum') ? $request->user('sanctum')->id : 1;
+        $result = $labService->assign($request->all(), $userId);
 
-        $laboratoryReagent->fill($request->all());
-        $laboratoryReagent->user_id = $userId;
-        $laboratoryReagent->reagent_inventory_id = $reagentInventory->id;
-        if (!$laboratoryReagent->save()) {
-            return response()->json(['message' => 'Laboratory reagent not assigned', 'data' => []], 500);
+        if (isset($result['error'])) {
+            return response()->json(['message' => $result['error'], 'data' => $result['data']], $result['status']);
         }
-        return response()->json(['message' => 'Laboratory reagent assigned', 'data' => $laboratoryReagent], 201);
+
+        return response()->json(['message' => 'Laboratory reagent assigned', 'data' => $result['data']], 201);
     }
 }

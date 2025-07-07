@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AnalyzerController;
 use App\Http\Controllers\Api\V1\AnalyzerReagentController;
+use App\Http\Controllers\Api\V1\AssignAndStoreController;
 use App\Http\Controllers\Api\V1\DepartmentController;
 use App\Http\Controllers\Api\V1\DistrictController;
 use App\Http\Controllers\Api\V1\LaboratoryController;
@@ -19,6 +20,8 @@ Route::apiResource('laboratories', LaboratoryController::class);
 
 Route::post('laboratory-reagents/assign', [LaboratoryReagentController::class, 'assign'])
     ->name('laboratory-reagents.assign');
+Route::post('laboratory-reagents/assign-and-store', AssignAndStoreController::class)
+    ->name('laboratory-reagents.assign-and-store');
 Route::apiResource('laboratory-reagents', LaboratoryReagentController::class);
 
 Route::get('reagent-inventories/generate', [ReagentInventoryController::class, 'generateMissingImage'])

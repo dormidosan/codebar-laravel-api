@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\BarcodeTypes;
 use App\Http\Controllers\Controller;
-use App\Models\BarcodeType;
 use App\Models\ReagentInventory;
 use App\Services\BarcodeService;
-use Exception;
+use App\Services\ReagentInventoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ReagentInventoryController extends Controller
 {
@@ -37,73 +34,19 @@ class ReagentInventoryController extends Controller
         return response()->json(['message' => 'Reagent inventories found', 'data' => $reagentInventories]);
     }
 
-    public function store(Request $request, BarcodeService $barcodeService): JsonResponse
+    public function store(Request $request, ReagentInventoryService $inventoryService): JsonResponse
     {
-
-        $reagentInventory = new ReagentInventory();
-        $barcodeTypeId = BarcodeTypes::CODE128;
-
-        // TODO: Get barcode type id from request or create a new one
-        if ($request->has('barcode_type_id')) {
-            $barcodeTypeId = $request->get('barcode_type_id');
-        }
-
-        // Get id of a barcode type by name or create a new one
-        if ($request->has('barcode_type_name')) {
-            try {
-                $barcodeTypeId = BarcodeType::firstOrCreate(['name' => $request->get('barcode_type_name')])->id;
-                $barcodeName = BarcodeTypes::expoToLaravel($request->get('barcode_type_name'));
-            } catch (Exception $e) {
-                //TODO: Log error
-            }
-        }
-
-        $existingInventory = ReagentInventory::query()
-            ->with("reagent")
-            ->where('barcode', $request->get('barcode'))
-            ->first();
-
-        if ($existingInventory) {
-            return response()->json([
-                'message' => ' Código de barras ya existe',
-                'data' => $existingInventory
-            ], 409);
-        }
-
         $userId = $request->user('sanctum')
             ? $request->user('sanctum')->id
             : 1;
 
-        $reagentInventory->fill($request->all());
-        $reagentInventory->barcode_type_id = $barcodeTypeId;
-        $reagentInventory->user_id = $userId;
-        $expiration = $reagentInventory->expiration_date;
+        $result = $inventoryService->create($request->all(),  $userId);
 
-        // If there is expiration date, check that is not in the past
-        $tomorrow = date('Y-m-d', strtotime('+1 day'));
-        // Store in laravel.log the expiration date
-        Log::info('Tomorrow date: '.$tomorrow);
-        Log::info('Reagent inventory data: '.json_encode($reagentInventory->toArray()));
-        if (!empty($expiration) && strtotime($expiration) < strtotime($tomorrow)) {
-            return response()->json(['message' => 'Fecha de expiración debe ser mayor a hoy', 'data' => []], 400);
+        if (isset($result['error'])) {
+            return response()->json(['message' => $result['error'], 'data' => $result['data']], $result['status']);
         }
 
-
-        $imageURL = $barcodeService
-            ->generateBarcode($reagentInventory->barcode,
-                $barcodeName ?? 'C128',
-                $reagentInventory->lot ?? "",
-                $expiration,
-                $reagentInventory->reagent->name ?? null);
-
-        if ($imageURL) {
-            $reagentInventory->image = $imageURL;
-        }
-
-        if (!$reagentInventory->save()) {
-            return response()->json(['message' => 'Reagent inventory not created', 'data' => []], 500);
-        }
-        return response()->json(['message' => 'Reagent inventory created', 'data' => $reagentInventory], 201);
+        return response()->json(['message' => 'Reagent inventory created', 'data' => $result['data']], 201);
     }
 
     public function show($id, BarcodeService $barcodeService): JsonResponse
