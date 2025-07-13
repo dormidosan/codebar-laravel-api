@@ -26,7 +26,7 @@ Route::apiResource('laboratory-reagents', LaboratoryReagentController::class);
 
 Route::get('reagent-inventories/generate', [ReagentInventoryController::class, 'generateMissingImage'])
     ->name('reagent-inventories.generate-missing-image');
-Route::get('reagent-inventories/{barcode}/check', [CheckBarcodeController::class])
+Route::get('reagent-inventories/{barcode}/check', CheckBarcodeController::class)
     ->name('reagent-inventories.check-barcode');
 Route::apiResource('reagent-inventories', ReagentInventoryController::class);
 
