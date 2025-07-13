@@ -24,7 +24,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => "An error occurred while retrieving data. Please try again later.".$e->getMessage(),
-                'status' => 500
             ], 500);
         });
 
@@ -32,7 +31,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => "Resource not found. ".$e->getMessage(),
-                'status' => 404
             ], 404);
         });
 
@@ -40,7 +38,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => "Method not allowed.".$e->getMessage(),
-                'status' => 405
             ], 405);
         });
 
@@ -48,7 +45,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => "Error authentication. ".$e->getMessage(),
-                'status' => 401
             ], 401);
         });
 
@@ -56,7 +52,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => "Unexpected error occurred. Please try again later.".$e->getMessage(),
-                'status' => 500
             ], 500);
         });
     })->create();

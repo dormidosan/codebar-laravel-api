@@ -56,6 +56,11 @@ class LaboratoryReagentController extends Controller
     {
         $laboratoryReagent = new LaboratoryReagent();
         $laboratoryReagent->fill($request->all());
+        $userId = $request->user('sanctum')
+            ? $request->user('sanctum')->id
+            : 1;
+        $laboratoryReagent->user_id = $userId;
+
         if (!$laboratoryReagent->save()) {
             return response()->json(['message' => 'Laboratory reagent not created', 'data' => []], 500);
         }
@@ -102,7 +107,9 @@ class LaboratoryReagentController extends Controller
 
     public function assign(Request $request, LaboratoryReagentService $labService): JsonResponse
     {
-        $userId = $request->user('sanctum') ? $request->user('sanctum')->id : 1;
+        $userId = $request->user('sanctum')
+            ? $request->user('sanctum')->id
+            : 1;
         $result = $labService->assign($request->all(), $userId);
 
         if (isset($result['error'])) {

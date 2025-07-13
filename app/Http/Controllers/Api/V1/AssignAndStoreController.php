@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 class AssignAndStoreController extends Controller
 {
 
+    /**
+     * Assigns a reagent to a laboratory and stores it in the inventory. (NOT USED)
+     *
+     * @param Request $request
+     * @param ReagentInventoryService $inventoryService
+     * @param LaboratoryReagentService $labService
+     * @return JsonResponse
+     */
     public function __invoke(Request $request, ReagentInventoryService $inventoryService, LaboratoryReagentService $labService): JsonResponse
     {
         if (!$request->filled('barcode')) {
@@ -27,6 +35,16 @@ class AssignAndStoreController extends Controller
             ->where('barcode', $assignData['barcode'])
             ->first();
 
+        if ($existingInventory) {
+            $exists = LaboratoryReagent::where('laboratory_id', $request->input('laboratory_id'))
+                ->where('reagent_inventory_id', $existingInventory->id)
+                ->exists();
+
+            if ($exists) {
+                return response()->json(['message' => 'El reactivo ya está asignado a este laboratorio.', 'data' => []], 409);
+            }
+        }
+
         if (empty($existingInventory)) {
             $inventoryResult = $inventoryService->create($assignData, $userId);
 
@@ -35,10 +53,10 @@ class AssignAndStoreController extends Controller
             }
 
             if (empty($inventoryResult['data'])) {
-                return response()->json(['message' => 'Reagent inventory not created', 'data' => []], 500);
+                return response()->json(['message' => 'El reactivo no pudo ser almacenado', 'data' => []], 500);
             }
 
-            /** @-v-ar ReagentInventory $reagentInventory */
+            /** @var ReagentInventory $existingInventory */
             $existingInventory = $inventoryResult['data'];
         }
 
@@ -48,11 +66,11 @@ class AssignAndStoreController extends Controller
         $laboratoryReagent->reagent_inventory_id = $existingInventory->id;
 
         if (!$laboratoryReagent->save()) {
-            return response()->json(['message' => 'Laboratory reagent not assigned', 'data' => [], 'status' => 500]);
+            return response()->json(['message' => 'Laboratory reagent not assigned', 'data' => []], 500);
         }
 
         return response()->json([
-            'message' => 'Laboratory reagent assigned successfully',
+            'message' => 'Reactivo asignado y almacenado correctamente',
             'data' => [
                 'inventory' => $existingInventory,
                 'laboratory_reagent' => $laboratoryReagent,

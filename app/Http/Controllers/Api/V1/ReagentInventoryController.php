@@ -40,7 +40,7 @@ class ReagentInventoryController extends Controller
             ? $request->user('sanctum')->id
             : 1;
 
-        $result = $inventoryService->create($request->all(),  $userId);
+        $result = $inventoryService->create($request->all(), $userId);
 
         if (isset($result['error'])) {
             return response()->json(['message' => $result['error'], 'data' => $result['data']], $result['status']);
@@ -96,16 +96,6 @@ class ReagentInventoryController extends Controller
             return response()->json(['message' => 'Reagent inventory not deleted', 'data' => $reagentInventory], 500);
         }
         return response()->json(['message' => 'Reagent inventory deleted', 'data' => $reagentInventory]);
-    }
-
-    public function checkBarcode(string $barcode): JsonResponse
-    {
-        $reagentInventory = ReagentInventory::with("reagent")->where('barcode', $barcode)->first();
-        if (empty($reagentInventory)) {
-            // This should be 404, but we want to allow creation of new reagent inventory
-            return response()->json(['message' => 'Barcode is unique', 'data' => []]);
-        }
-        return response()->json(['message' => 'Barcode found', 'data' => $reagentInventory]);
     }
 
     public function generateMissingImage(BarcodeService $barcodeService): JsonResponse
