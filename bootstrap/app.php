@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LogAccessMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
@@ -16,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Run on every request
+        $middleware->append(LogAccessMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
