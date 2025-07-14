@@ -18,7 +18,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -46,6 +46,10 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static Builder<static>|User whereUpdatedAt($value)
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property int $role_id 1- admin, 2- regular user, 3- laboratory manager, 4- laboratory technician, 5- laboratory assistant, 6- other
+ * @property-read Collection<int, ReagentInventory> $reagentInventories
+ * @property-read int|null $reagent_inventories_count
+ * @method static Builder<static>|User whereRoleId($value)
  * @mixin Eloquent
  */
 class User extends Authenticatable

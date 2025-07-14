@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $reagent_id
@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|ReagentInventory whereReagentId($value)
  * @method static Builder<static>|ReagentInventory whereUpdatedAt($value)
  * @method static Builder<static>|ReagentInventory whereUserId($value)
+ * @property-read User $user
  * @mixin Eloquent
  */
 class ReagentInventory extends Model
