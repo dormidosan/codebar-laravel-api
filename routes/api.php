@@ -14,8 +14,8 @@ Route::post('password/reset', [AuthController::class, 'updatePasswordRequest']);
 
 //File for API is barcode.php
 // TODO: change to use auth:sanctum
-Route::prefix('v1')->group(base_path('routes/api/barcode.php'));
-//Route::middleware('auth:sanctum')->prefix('v1')->group(base_path('routes/api/barcode.php'));
+//Route::prefix('v1')->group(base_path('routes/api/barcode.php'));
+Route::middleware('auth:sanctum')->prefix('v1')->group(base_path('routes/api/barcode.php'));
 
 Route::post('/examenesEquipo', function () {
 
