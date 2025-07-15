@@ -26,7 +26,7 @@ class AuthenticationTest extends TestCase
         // Simulate a user login
         $user = User::factory()->create();
         $this->actingAs($user, 'sanctum')
-            ->get('api/v1/reagent-inventories')
+            ->getJson('api/v1/reagent-inventories')
             ->assertStatus(200);
 
     }
