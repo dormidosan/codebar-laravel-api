@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -22,11 +23,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder<static>|Analyzer whereArea($value)
  * @method static Builder<static>|Analyzer whereId($value)
  * @method static Builder<static>|Analyzer whereName($value)
+ * @method static \Database\Factories\AnalyzerFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class Analyzer extends Model
 {
-    //
+    use HasFactory;
+
     protected $fillable = ['area', 'name'];
 
     public function reagents(): BelongsToMany

@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,11 +28,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|District whereId($value)
  * @method static Builder<static>|District whereMunicipalityId($value)
  * @method static Builder<static>|District whereName($value)
+ * @method static \Database\Factories\DistrictFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class District extends Model
 {
-    //
+    use HasFactory;
+
     public function laboratories(): HasMany
     {
         return $this->hasMany(Laboratory::class);

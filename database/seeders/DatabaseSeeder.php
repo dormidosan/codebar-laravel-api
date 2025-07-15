@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\AnalyzerReagent;
 use App\Models\Laboratory;
-use App\Models\LaboratoryReagent;
-use App\Models\ReagentInventory;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -35,11 +33,11 @@ class DatabaseSeeder extends Seeder
 
             //Reagent::factory(50)->create();
 
-            AnalyzerReagent::factory(50)->create();
+            AnalyzerReagent::factory(5)->create();
 //
-            ReagentInventory::factory(50)->create();
+            //ReagentInventory::factory(50)->create();
 //
-            LaboratoryReagent::factory(50)->create();
+            //LaboratoryReagent::factory(50)->create();
         }
     }
 }
