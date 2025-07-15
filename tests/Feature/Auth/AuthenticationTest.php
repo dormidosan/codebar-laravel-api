@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -9,15 +10,36 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-//    public function test_users_can_not_authenticate_with_invalid_password(): void
-//    {
-//        $user = User::factory()->create();
-//
-//        $this->post('/login', [
-//            'email' => $user->email,
-//            'password' => 'wrong-password',
-//        ]);
-//
-//        $this->assertGuest();
-//    }
+    public function test_can_not_access_protected_route_without_authentication(): void
+    {
+        $response = $this->get('api/v1/reagent-inventories');
+
+
+        $response->assertStatus(500);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'Unexpected error occurred. Please try again later.Route [login] not defined.',
+        ]);
+    }
+    public function test_can_access_protected_route_with_authentication(): void
+    {
+        // Simulate a user login
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+
+        $response = $this->get('api/v1/reagent-inventories');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'message',
+            'data' => [
+                '*' => [
+                    'id',
+                    'barcode',
+                    'lot',
+                    'expiration_date',
+                ],
+            ],
+        ]);
+    }
 }
