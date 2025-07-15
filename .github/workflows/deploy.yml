@@ -51,7 +51,7 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run Tests
-        run: php artisan test -v
+        run: php artisan test
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
