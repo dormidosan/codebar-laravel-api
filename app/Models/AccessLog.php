@@ -29,6 +29,6 @@ use Illuminate\Support\Carbon;
  */
 class AccessLog extends Model
 {
-    protected $fillable = ['ip_address', 'url', 'method', 'user_id', 'user_agent'];
+    protected $fillable = ['ip_address', 'url', 'method'];
 
 }

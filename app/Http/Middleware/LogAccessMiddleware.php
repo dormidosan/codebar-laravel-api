@@ -16,15 +16,10 @@ class LogAccessMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $userId = $request->user('sanctum')
-            ? $request->user('sanctum')->id
-            : null;
         AccessLog::create([
             'ip_address' => $request->ip(),
             'url' => $request->path(),
-            'method' => $request->method(),
-            'user_agent' => $request->userAgent(),
-            'user_id' => $userId
+            'method' => $request->method()
         ]);
         return $next($request);
     }
