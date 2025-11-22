@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\LogAccessMiddleware;
+use App\Http\Middleware\UserActionLogMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Run on every request
         $middleware->append(LogAccessMiddleware::class);
+        $middleware->alias([
+            'user.action.log' => UserActionLogMiddleware::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

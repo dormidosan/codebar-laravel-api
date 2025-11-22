@@ -30,6 +30,8 @@ class Analyzer extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = ['area', 'name'];
 
     public function reagents(): BelongsToMany

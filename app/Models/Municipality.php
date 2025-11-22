@@ -32,6 +32,8 @@ class Municipality extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function districts(): HasMany
     {
         return $this->hasMany(District::class);

@@ -133,6 +133,12 @@ return [
             'level' => 'debug',
         ],
 
+        'user-access' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/user-access.log'),
+            'level' => 'debug',
+        ],
+
     ],
 
 ];

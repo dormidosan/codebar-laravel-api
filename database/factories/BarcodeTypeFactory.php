@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Reagent;
+use App\Models\BarcodeType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Reagent>
+ * @extends Factory<BarcodeType>
  */
 class BarcodeTypeFactory extends Factory
 {

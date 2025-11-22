@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|BarcodeType query()
  * @method static Builder<static>|BarcodeType whereId($value)
  * @method static Builder<static>|BarcodeType whereName($value)
+ * @method static \Database\Factories\BarcodeTypeFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class BarcodeType extends Model

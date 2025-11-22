@@ -32,6 +32,8 @@ class Department extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function municipalities(): HasMany
     {
         return $this->hasMany(Municipality::class);
