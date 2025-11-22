@@ -20,6 +20,8 @@ class LogAccessMiddleware
             'ip_address' => $request->ip(),
             'url' => $request->path(),
             'method' => $request->method(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => $request->user()?->id
         ]);
         return $next($request);
     }

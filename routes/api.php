@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CheckRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -273,3 +274,6 @@ Route::post('/actualizarResultados', function (Request $request) {
         ];
     return response()->json($return);
 });
+
+Route::post('/check-request', CheckRequestController::class);
+Route::get('/check-request', CheckRequestController::class);

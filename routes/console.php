@@ -3,6 +3,7 @@
 use App\Console\Commands\PruneExpiredSanctumTokens;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -26,3 +27,8 @@ Artisan::command('emails:send {user} {--force}', function () {
     // User::where('created_at', '<', now()->subDays(30))->delete();
     $this->info('Recent users emailed successfully.');
 })->purpose('Send emails to the specified user')->daily();
+
+Schedule::call(function () {
+    // print message in laravel.log
+    Log::info('Deleting recent users 2 mins...');
+})->everyTwoMinutes()->name('delete-recent-users');
