@@ -2,16 +2,20 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CheckRequestController;
+use App\Http\Controllers\Api\V1\ResetPasswordController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::apiResource('users', UserController::class)
+    ->middleware('auth:sanctum')
+    ->only(['index', 'show']);
+
+Route::post('users/reset-password', [ResetPasswordController::class]);
 
 Route::post('password/request-token', [AuthController::class, 'updatePasswordRequestToken']);
-Route::post('password/reset', [AuthController::class, 'updatePasswordRequest']);
+Route::post('password/update', [AuthController::class, 'updatePasswordRequest']);
 
 //File for API is barcode.php
 // TODO: change to use auth:sanctum
