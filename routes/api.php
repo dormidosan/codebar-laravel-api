@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 
-Route::post('users/reset-password', ResetPasswordController::class);
-Route::middleware('auth:sanctum')->group(function () {
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('users/reset-password', ResetPasswordController::class);
     Route::apiResource('users', UserController::class)
         ->only(['index', 'show']);
 });
