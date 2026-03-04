@@ -13,6 +13,10 @@ class ResetPasswordController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        if ($request->user()->role_id !== 1) {
+            return response()->json(['message' => 'Unauthorized', 'data' => []], 401);
+        }
+
         $request->validate([
             'email' => 'required|email',
             'user_id' => 'exists:users,id',

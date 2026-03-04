@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
-Route::apiResource('users', UserController::class)
-    ->middleware('auth:sanctum')
-    ->only(['index', 'show']);
 
-Route::post('users/reset-password', [ResetPasswordController::class]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('users/reset-password', [ResetPasswordController::class]);
+    Route::apiResource('users', UserController::class)
+        ->only(['index', 'show']);
+});
 
 Route::post('password/request-token', [AuthController::class, 'updatePasswordRequestToken']);
 Route::post('password/update', [AuthController::class, 'updatePasswordRequest']);
