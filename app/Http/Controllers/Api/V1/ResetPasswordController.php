@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
@@ -34,8 +33,8 @@ class ResetPasswordController extends Controller
         $user->password = Hash::make('password');
         $user->save();
 
-        // Finish all sessions in DB
-        DB::table('sessions')->where('user_id', $user->id)->delete();
+        // Revoke all tokens
+        $user->tokens()->delete();
         return response()->json(['message' => 'Success', 'data' => []]);
     }
 }

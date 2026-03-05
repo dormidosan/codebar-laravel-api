@@ -28,7 +28,22 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $token = $user->createToken('api-token')->plainTextToken;
+
+        // Check for existing non-expired token, or create a new one if expired/missing
+        $existingToken = $user->tokens()
+            ->where('name', 'api-token')
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if ($existingToken) {
+            $token = $existingToken->token;
+        }
+        else {
+            // Delete any expired tokens for this user
+            $user->tokens()->where('name', 'api-token')->delete();
+            // Create a new token
+            $token = $user->createToken('api-token')->plainTextToken;
+        }
 
         return response()->json([
             'token' => $token,
