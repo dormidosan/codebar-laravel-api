@@ -32,7 +32,11 @@ class AuthController extends Controller
         // Check for existing non-expired token, or create a new one if expired/missing
         $existingToken = $user->tokens()
             ->where('name', 'api-token')
-            ->where('expires_at', '>', now())
+            ->where(static function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->where('created_at', '>=', now()->subMinutes(config('sanctum.expiration')))
             ->first();
 
         if ($existingToken) {
