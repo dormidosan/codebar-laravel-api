@@ -33,6 +33,7 @@ class AuthController extends Controller
         $existingToken = $user->tokens()
             ->where('name', 'api-token')
             ->where(static function ($query) {
+                // Get null and values with date.
                 $query->whereNull('expires_at')
                     ->orWhere('expires_at', '>', now());
             })

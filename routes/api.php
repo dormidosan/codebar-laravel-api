@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('users/reset-password', ResetPasswordController::class);
     Route::apiResource('users', UserController::class)
