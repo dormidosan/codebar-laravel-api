@@ -29,7 +29,7 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        // Check for existing non-expired token, or create a new one if expired/missing
+        // Check for existing non-expired token or create a new one if expired/missing
         $existingToken = $user->tokens()
             ->where('name', 'api-token')
             ->where(static function ($query) {
