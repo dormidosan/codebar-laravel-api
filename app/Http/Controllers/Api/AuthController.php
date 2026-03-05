@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -39,6 +40,9 @@ class AuthController extends Controller
             })
             ->where('created_at', '>=', now()->subMinutes(config('sanctum.expiration')))
             ->first();
+
+        Log::info('existingToken: ' . $existingToken);
+        Log::info('time' . now()->subMinutes(config('sanctum.expiration')). 'and expiration: ' . config('sanctum.expiration'));
 
         if ($existingToken) {
             $token = $existingToken->token;
