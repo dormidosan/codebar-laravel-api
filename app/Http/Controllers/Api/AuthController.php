@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -30,29 +29,9 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        // Check for existing non-expired token or create a new one if expired/missing
-        $existingToken = $user->tokens()
-            ->where('name', 'api-token')
-            ->where(static function ($query) {
-                // Get null and values with date.
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', now());
-            })
-            ->where('created_at', '>=', now()->subMinutes(config('sanctum.expiration')))
-            ->first();
-
-        Log::info('existingToken: ' . $existingToken);
-        Log::info('time' . now()->subMinutes(config('sanctum.expiration')). 'and expiration: ' . config('sanctum.expiration'));
-
-        if ($existingToken) {
-            $token = $existingToken->token;
-        }
-        else {
-            // Delete any expired tokens for this user
-            $user->tokens()->where('name', 'api-token')->delete();
-            // Create a new token
-            $token = $user->createToken('api-token')->plainTextToken;
-        }
+        // Fetch all tokens from user, delet them and create a new one
+        $user->tokens()->delete();
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
